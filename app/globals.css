@@ -127,7 +127,14 @@ body {
   color: #ffffff !important;
   border-radius: 40px !important;
 }
-
+.zyoris-logo {
+  font-family: var(--font-zyoris),sans-serif ;
+  font-size: 25px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: #102c69;
+  line-height: 1;
+}
 .button:hover {
   background-color: var(--color-zyoris--bright) !important;
 }
@@ -167,7 +174,16 @@ body {
 
 .section_home1_features .home1_features_text,
 .section_home1_features .home1_features_link {
-  color: var(--color-base--black) !important;
+  color: #000000 !important;
+  opacity: 1 !important;
+}
+
+.section_home1_features .home1_features_text * {
+  color: #000000 !important;
+}
+
+.text-red-250 {
+  color: rgb(250, 60, 60) !important;
 }
 
 .section_home1_features .home1_features_link-dot {

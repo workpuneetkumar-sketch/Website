@@ -59,7 +59,7 @@ export const ShowcaseSection: React.FC = () => {
                       Replace 5–8 Separate Tools
                     </h3>
                     <p className="text-sm text-[#52667D] leading-relaxed font-normal">
-                      CRM (₹3K+) + HR (₹2K+) + Finance (₹2K+) + Analytics (₹1.5K+) + Call Centre (₹2K+) = ₹12K+ per user/month in tool costs alone. Zyoris gives you all of this starting at ₹4,500.</p>
+                      Instead of paying separately for CRM, HR, Finance, Analytics, and Call Centre software, get everything in one place with Zyoris — starting at just ₹4,500 per user/month.</p>
                   </div>
                 </div>
                 <div className="deploya-card p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-blue-500/10 hover:border-[#2979FF] border border-[#D5E3F7]/80 rounded-2xl bg-white group">

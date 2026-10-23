@@ -208,8 +208,8 @@ export const FeaturesSection: React.FC = () => {
                       key={item.id}
                       href={`#${item.id}`}
                       onClick={(e) => scrollToCard(item.id, e)}
-                      className={`home1_features_link w-inline-block transition-all duration-200 cursor-pointer ${
-                        isActive ? "is-active opacity-100" : "opacity-45 hover:opacity-75"
+                      className={`home1_features_link w-inline-block transition-all duration-200 cursor-pointer !opacity-100 ${
+                        isActive ? "is-active" : ""
                       }`}
                     >
                       <div className="home1_features_link-decor flex flex-col items-center">
@@ -232,15 +232,15 @@ export const FeaturesSection: React.FC = () => {
                       </div>
                       <div className="home1_features_text pb-4">
                         <div
-                          className={`text-base transition-colors duration-200 ${
+                          className={`text-base transition-colors duration-200 text-black ${
                             isActive
-                              ? "font-semibold text-[#0A1E3F]"
-                              : "font-normal text-[#0A1E3F]/80"
+                              ? "font-semibold"
+                              : "font-normal"
                           }`}
                         >
                           {item.title}
                         </div>
-                        <div className="text-xs text-[#0A1E3F]/70 line-clamp-2 mt-0.5 leading-relaxed">
+                        <div className="text-xs text-black line-clamp-2 mt-0.5 leading-relaxed">
                           {item.desc}
                         </div>
                       </div>

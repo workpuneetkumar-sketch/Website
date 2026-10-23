@@ -84,7 +84,7 @@ export default function AboutPage() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
                 {/* Card 1: One Platform */}
                 <div className="deploya-card p-7 md:p-8 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-blue-500/10 hover:border-[#2979FF] border border-[#D5E3F7]/80 rounded-2xl bg-white group">
                   <div>
@@ -115,22 +115,7 @@ export default function AboutPage() {
                   </div>
                 </div>
 
-                {/* Card 3: Built for India */}
-                <div className="deploya-card p-7 md:p-8 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-blue-500/10 hover:border-[#2979FF] border border-[#D5E3F7]/80 rounded-2xl bg-white group">
-                  <div>
-                    <div className="w-12 h-12 rounded-xl bg-[#F0F5FF] border border-[#D4E2F5] flex items-center justify-center text-[#2979FF] mb-5 group-hover:bg-[#2979FF] group-hover:text-white transition-colors duration-200">
-                      <ShieldCheck className="w-6 h-6" />
-                    </div>
-                    <h3 className="text-xl font-bold text-[#0A1E3F] mb-2.5 tracking-tight">
-                      Built for India
-                    </h3>
-                    <p className="text-sm md:text-base text-[#52667D] leading-relaxed font-normal">
-                      GST-compliant. Indian workflows. Indian pricing. Not a US product adapted for a market it doesn&apos;t understand.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Card 4: Grows With You */}
+                {/* Card 3: Grows With You */}
                 <div className="deploya-card p-7 md:p-8 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-blue-500/10 hover:border-[#2979FF] border border-[#D5E3F7]/80 rounded-2xl bg-white group">
                   <div>
                     <div className="w-12 h-12 rounded-xl bg-[#F0F5FF] border border-[#D4E2F5] flex items-center justify-center text-[#2979FF] mb-5 group-hover:bg-[#2979FF] group-hover:text-white transition-colors duration-200">

@@ -130,23 +130,37 @@ export const IntegrationsSection: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="text-sm divide-y divide-white/5">
-                {comparisonRows.map((row, idx) => (
-                  <tr
-                    key={idx}
-                    className={`transition-colors hover:bg-white/5 ${
-                      row.isPrice ? "font-bold text-white bg-white/5" : "text-white/80"
-                    }`}
-                  >
-                    <td className="py-3.5 px-4 font-medium text-black">{row.feature}</td>
-                    <td className="py-3.5 px-4 text-black/60">{row.salesforce}</td>
-                    <td className="py-3.5 px-4 text-black/60">{row.zoho}</td>
-                    <td className="py-3.5 px-4 text-black/60">{row.odoo}</td>
-                    <td className="py-3.5 px-4 text-black/60">{row.freshsales}</td>
-                    <td className="py-3.5 px-4 font-semibold text-blue-400 bg-blue-500/10">
-                      {row.zyoris}
+                {comparisonRows.map((row, idx) => {
+                  const renderCell = (val: string) => (
+                    <td
+                      className={`py-3.5 px-4 ${
+                        val === "No"
+                          ? "text-red-400 font-medium"
+                          : "text-black/60"
+                      }`}
+                    >
+                      {val}
                     </td>
-                  </tr>
-                ))}
+                  );
+
+                  return (
+                    <tr
+                      key={idx}
+                      className={`transition-colors hover:bg-white/5 ${
+                        row.isPrice ? "font-bold text-white bg-white/5" : "text-white/80"
+                      }`}
+                    >
+                      <td className="py-3.5 px-4 font-medium text-black">{row.feature}</td>
+                      {renderCell(row.salesforce)}
+                      {renderCell(row.zoho)}
+                      {renderCell(row.odoo)}
+                      {renderCell(row.freshsales)}
+                      <td className="py-3.5 px-4 font-semibold text-blue-400 bg-blue-500/10">
+                        {row.zyoris}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

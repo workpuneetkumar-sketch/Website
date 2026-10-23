@@ -40,8 +40,7 @@ export const Navbar: React.FC = () => {
                 height={36}
                 className="w-9 h-9 rounded-lg object-cover flex-shrink-0"
               />
-              <span style={{ letterSpacing: "2%", "fontFamily": "Didact Gothic", "fontWeight": 400, "fontStyle": "Normal", "fontSize": 28, "lineHeight": "100%", "color": "black" }}> Zyoris</span>
-            </div>
+              <span className="zyoris-logo">zyoris</span></div>
           </Link>
 
           {/* Nav Right */}

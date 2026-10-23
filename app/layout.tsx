@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "../styles/deploya.css"
+import {Michroma} from "next/font/google"
+
+const michroma = Michroma({
+  weight : "400",
+  subsets: ["latin"],
+  variable: "--font-zyoris",
+})
 
 
 
@@ -30,9 +37,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang="en">
       <head>
@@ -43,7 +50,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body>
+      <body className={michroma.variable}>
         <div className="page-wrapper">
           {children}
         </div>

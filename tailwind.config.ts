@@ -21,6 +21,9 @@ const config: Config = {
           white: "var(--color-base--white, whitesmoke)",
           black: "var(--color-base--black, #292929)",
         },
+        red: {
+          250: "rgb(250, 60, 60)",
+        },
       },
       fontFamily: {
         sans: ["var(--fonts--body)", "Switzer", "Arial", "sans-serif"],
