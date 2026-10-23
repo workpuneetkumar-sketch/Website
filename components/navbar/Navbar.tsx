@@ -30,17 +30,15 @@ export const Navbar: React.FC = () => {
             id="w-node-_90194ca1-81d8-1b85-2f41-dfea0faac993-0faac98e"
             href="/"
             aria-current="page"
-            className="nav-brand w-nav-brand w--current flex items-center gap-2"
+            className="nav-brand w-nav-brand w--current flex items-center"
           >
-            <div className="flex items-center gap-2.5 font-bold text-xl tracking-tight text-white">
+            <div className="flex items-center">
               <img
                 src="/logo.jpeg"
                 alt="Zyoris logo"
-                width={36}
-                height={36}
-                className="w-9 h-9 rounded-lg object-cover flex-shrink-0"
+                className="h-9 sm:h-10 w-auto max-w-[180px] sm:max-w-[210px] object-contain mix-blend-multiply flex-shrink-0"
               />
-              <span className="zyoris-logo">zyoris</span></div>
+            </div>
           </Link>
 
           {/* Nav Right */}

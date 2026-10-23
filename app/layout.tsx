@@ -16,8 +16,8 @@ export const metadata: Metadata = {
   title: "Zyoris | India's AI-Powered Business OS — CRM, HR, Finance in One Platform",
   description: "Zyoris is India's first Intelligent Business Operating System. One platform for Sales & CRM, HR, Finance, and AI Insights. Starting at ₹4,500/user/month. Built for Indian SMBs.",
   icons: {
-    icon: "/logo.jpeg",
-    apple: "/logo.jpeg",
+    icon: "/logoMain.jpeg",
+    apple: "/logoMain.jpeg",
   },
   openGraph: {
     title: "Zyoris | India's AI-Powered Business OS",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     siteName: "Zyoris",
     images: [
       {
-        url: "/logo.jpeg",
+        url: "/logoMain.jpeg",
         width: 512,
         height: 512,
         alt: "Zyoris Logo",
