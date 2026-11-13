@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { usePathname } from "next/navigation";
 import "./globals.css";
 import "../styles/deploya.css"
 import { Michroma } from "next/font/google";
@@ -167,7 +168,8 @@ export default function RootLayout({
             }),
           }}
         />
-      </head>
+      <link rel="canonical" href={`https://zyoris.com${usePathname()}`} />
+</head>
       <body className={michroma.variable}>
         <div className="page-wrapper">
           {children}

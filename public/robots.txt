@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Allow: /faq
+Allow: /pricing
+Allow: /about
+Allow: /contact-v1
+Allow: /careers
+Sitemap: https://zyoris.com/sitemap.xml
