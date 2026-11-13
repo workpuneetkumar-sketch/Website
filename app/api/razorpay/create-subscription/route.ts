@@ -1,29 +1,18 @@
 import { NextResponse } from "next/server";
 import Razorpay from "razorpay";
 
-// Plan mappings in Razorpay
-const RAZORPAY_PLANS: Record<string, { monthly: string; yearly: string }> = {
-  starter: {
-    monthly: "plan_Tzk4hc2ihd1cym",
-    yearly: "plan_TzkF6FxTjYdLpH",
-  },
-  growth: {
-    monthly: "plan_Tzk5HhfhDIBoY0",
-    yearly: "plan_TzkFCUqqqXe0vj",
-  },
-  business: {
-    monthly: "plan_TzkEN96iMmd13V",
-    yearly: "plan_TzkFJoZCJnX9By",
-  },
+// Plan mappings in Razorpay (Monthly plans created with GST inclusive amount per seat)
+const RAZORPAY_PLANS: Record<string, string> = {
+  starter: "plan_TzkQQB4p6ANiJF", // ₹5,310/seat/mo (₹4,500 + 18% GST)
+  growth: "plan_TzkQWUGHGAOzMr",  // ₹10,030/seat/mo (₹8,500 + 18% GST)
+  business: "plan_TzkQd3tFLgXJnY", // ₹14,160/seat/mo (₹12,000 + 18% GST)
 };
 
 export async function POST(req: Request) {
   try {
     const {
       planId = "starter",
-      billingCycle = "monthly",
       userCount = 1,
-      totalCount = 60, // 60 monthly cycles (5 years)
       isFreeTrialOffer = false, // 1st month free for coupon ZyorisNew
       customerDetails = {},
       notes = {},
@@ -39,30 +28,21 @@ export async function POST(req: Request) {
       );
     }
 
-    const selectedPlan = RAZORPAY_PLANS[planId];
-    if (!selectedPlan) {
-      return NextResponse.json(
-        { error: "Invalid plan selected" },
-        { status: 400 }
-      );
-    }
-
-    const razorpayPlanId =
-      billingCycle === "annual" ? selectedPlan.yearly : selectedPlan.monthly;
+    const razorpayPlanId = RAZORPAY_PLANS[planId] || RAZORPAY_PLANS.starter;
 
     const razorpay = new Razorpay({
       key_id: keyId,
       key_secret: keySecret,
     });
 
-    // 1. Create or ensure customer in Razorpay
+    // 1. Create or link customer in Razorpay
     let customerId: string | undefined;
     if (customerDetails.email) {
       try {
         const customer = await razorpay.customers.create({
           name: customerDetails.name || "Zyoris Customer",
           email: customerDetails.email,
-          contact: customerDetails.contact || "",
+          contact: customerDetails.contact ? customerDetails.contact.replace(/\D/g, "").slice(-10) : "",
           notes: {
             company: customerDetails.company || "",
             gstin: customerDetails.gstin || "",
@@ -74,18 +54,15 @@ export async function POST(req: Request) {
       }
     }
 
-    // 2. Compute subscription options
-    // If free trial offer (e.g. ZyorisNew 1 month free), start recurring billing 30 days from now!
-    // Razorpay allows start_at timestamp for future charge
+    // 2. Compute subscription options (Autopay monthly recurring)
     const subOptions: any = {
       plan_id: razorpayPlanId,
-      total_count: billingCycle === "annual" ? 5 : totalCount, // 5 years total
+      total_count: 60, // 60 monthly cycles (5 years ongoing subscription)
       quantity: Math.max(1, Number(userCount) || 1),
       customer_notify: 1,
       notes: {
         ...notes,
         plan: planId,
-        billingCycle,
         userCount,
         isFreeTrialOffer: isFreeTrialOffer ? "true" : "false",
       },
@@ -95,8 +72,8 @@ export async function POST(req: Request) {
       subOptions.customer_id = customerId;
     }
 
+    // If 1st month 100% free (Coupon ZyorisNew), start recurring billing 30 days from now!
     if (isFreeTrialOffer) {
-      // 30 days trial: start billing after 30 days (first month completely free)
       const thirtyDaysAhead = Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60;
       subOptions.start_at = thirtyDaysAhead;
     }
