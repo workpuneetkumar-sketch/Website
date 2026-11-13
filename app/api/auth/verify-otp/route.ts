@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { verifyStoredOtp } from "@/lib/otpStore";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req: Request) {
   try {
     const { email, otp } = await req.json();

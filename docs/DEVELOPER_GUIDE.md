@@ -151,6 +151,8 @@ Website/
 3. **"Get Early Access" Viewport Center Alignment**:
    - Programmed `el.scrollIntoView({ behavior: "smooth", block: "center" })` on Navbar and Hero buttons.
    - Added `scroll-mt-28 md:scroll-mt-32` and `!pb-24 md:!pb-36` to `#early-access` card to eliminate top clipping behind the navbar.
+4. **Vercel Zero-Config Build Resilience**:
+   - Implemented lazy proxy initialization for Resend in `lib/resend.ts` and added `export const dynamic = "force-dynamic"` to all API routes so Next.js build never crashes when static page data collection runs in CI/CD without environment variables.
 
 ---
 

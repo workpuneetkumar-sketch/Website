@@ -3,6 +3,8 @@ import { resend, FROM_EMAIL, REPLY_TO_EMAIL } from "@/lib/resend";
 import { storeOtp } from "@/lib/otpStore";
 import { renderEmailTemplate, getZyorisBannerAttachment } from "@/lib/emailTemplates";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req: Request) {
   try {
     const { email, name } = await req.json();

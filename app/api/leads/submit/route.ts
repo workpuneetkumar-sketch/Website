@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { resend, ADMIN_EMAIL, FROM_EMAIL, REPLY_TO_EMAIL } from "@/lib/resend";
 import { renderEmailTemplate, getZyorisBannerAttachment } from "@/lib/emailTemplates";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
