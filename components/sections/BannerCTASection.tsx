@@ -23,25 +23,13 @@ export const BannerCTASection: React.FC = () => {
         <video
           ref={videoRef}
           id="806e7a24-3b92-d55f-e300-76702ced1834-video"
+          src="/videos/loop-footer-video.mp4"
           autoPlay
           loop
           muted
           playsInline
-          style={{
-            backgroundImage:
-              'url("https://cdn.prod.website-files.com/69b13cad49372c03e40843d9%2F69df7d65e2727153564df353_u4716226838__--ar_7758_--bs_2_--motion_high_--video_1_103b4125-6dbf-4027-911c-97b44df65f41_1_poster.0000000.jpg")',
-            objectFit: "cover",
-          }}
-        >
-          <source
-            src="https://cdn.prod.website-files.com/69b13cad49372c03e40843d9%2F69df7d65e2727153564df353_u4716226838__--ar_7758_--bs_2_--motion_high_--video_1_103b4125-6dbf-4027-911c-97b44df65f41_1_mp4.mp4"
-            type="video/mp4"
-          />
-          <source
-            src="https://cdn.prod.website-files.com/69b13cad49372c03e40843d9%2F69df7d65e2727153564df353_u4716226838__--ar_7758_--bs_2_--motion_high_--video_1_103b4125-6dbf-4027-911c-97b44df65f41_1_webm.webm"
-            type="video/webm"
-          />
-        </video>
+          style={{ objectFit: "cover" }}
+        />
         
         <div aria-live="polite">
           <button
@@ -90,7 +78,7 @@ export const BannerCTASection: React.FC = () => {
                 <div>Get in Touch</div>
               </div>
               <div className="spacer-xsmall"></div>
-              <h2 animate="title" data-animate="title">
+              <h2 animate="title" data-animate="title" className="!text-white">
                 Start Your Zyoris Journey
               </h2>
               <div className="spacer-xsmall"></div>
@@ -98,9 +86,9 @@ export const BannerCTASection: React.FC = () => {
                 <div
                   animate="fade-up-2"
                   data-animate="fade-up-2"
-                  className="text-size-medium"
+                  className="text-size-medium !text-white"
                 >
-                 Tell us about your business and we'll get back to you personally. No spam, no automated responses — just a real conversation about how Zyoris can work for you.</div>
+                 Tell us about your business and we'll get back to you personally. No spam, no automated responses, just a real conversation about how Zyoris can work for you.</div>
               </div>
             </div>
 
@@ -108,60 +96,60 @@ export const BannerCTASection: React.FC = () => {
               id="contact"
               animate="fade-up-3"
               data-animate="fade-up-3"
-              className="w-full max-w-xl mx-auto my-6 p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md"
+              className="w-full max-w-xl mx-auto my-6 p-6 rounded-2xl bg-[rgba(7,16,31,0.58)] border border-white/30 backdrop-blur-xl shadow-[0_18px_50px_rgba(0,0,0,0.28)]"
             >
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  alert("Details received — our team will reach out within 24 hours.");
+                  alert("Details received: our team will reach out within 24 hours.");
                 }}
                 className="space-y-4 text-left"
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs uppercase tracking-wider text-white/70 mb-1 font-semibold">Your Name *</label>
+                    <label className="block text-xs uppercase tracking-wider text-white mb-1 font-semibold">Your Name *</label>
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Rahul Sharma"
-                      className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/15 text-white placeholder-white/40 focus:outline-none focus:border-blue-500 text-sm"
+                      placeholder="Your name"
+                      className="w-full px-3 py-2 rounded-lg bg-white/15 border border-white/25 text-white placeholder-white/55 focus:outline-none focus:border-blue-400 text-sm"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs uppercase tracking-wider text-white/70 mb-1 font-semibold">Company Name *</label>
+                    <label className="block text-xs uppercase tracking-wider text-white mb-1 font-semibold">Company Name *</label>
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Apex Technologies"
-                      className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/15 text-white placeholder-white/40 focus:outline-none focus:border-blue-500 text-sm"
+                      placeholder="e.g. Zyoris"
+                      className="w-full px-3 py-2 rounded-lg bg-white/15 border border-white/25 text-white placeholder-white/55 focus:outline-none focus:border-blue-400 text-sm"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs uppercase tracking-wider text-white/70 mb-1 font-semibold">Work Email *</label>
+                    <label className="block text-xs uppercase tracking-wider text-white mb-1 font-semibold">Work Email *</label>
                     <input
                       type="email"
                       required
-                      placeholder="rahul@company.in"
-                      className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/15 text-white placeholder-white/40 focus:outline-none focus:border-blue-500 text-sm"
+                      placeholder="info@zyoris.com"
+                      className="w-full px-3 py-2 rounded-lg bg-white/15 border border-white/25 text-white placeholder-white/55 focus:outline-none focus:border-blue-400 text-sm"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs uppercase tracking-wider text-white/70 mb-1 font-semibold">Phone Number *</label>
+                    <label className="block text-xs uppercase tracking-wider text-white mb-1 font-semibold">Phone Number *</label>
                     <input
                       type="tel"
                       required
-                      placeholder="+91 98765 43210"
-                      className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/15 text-white placeholder-white/40 focus:outline-none focus:border-blue-500 text-sm"
+                      placeholder="+91 96505 53728"
+                      className="w-full px-3 py-2 rounded-lg bg-white/15 border border-white/25 text-white placeholder-white/55 focus:outline-none focus:border-blue-400 text-sm"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs uppercase tracking-wider text-white/70 mb-1 font-semibold">Team Size</label>
-                  <select className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-white/15 text-white focus:outline-none focus:border-blue-500 text-sm">
+                  <label className="block text-xs uppercase tracking-wider text-white mb-1 font-semibold">Team Size</label>
+                  <select className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-white/25 text-white focus:outline-none focus:border-blue-400 text-sm">
                     <option value="1-10">1–10 people</option>
                     <option value="11-50">11–50 people</option>
                     <option value="51-200">51–200 people</option>
@@ -170,11 +158,11 @@ export const BannerCTASection: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs uppercase tracking-wider text-white/70 mb-1 font-semibold">What are you looking for?</label>
+                  <label className="block text-xs uppercase tracking-wider text-white mb-1 font-semibold">What are you looking for?</label>
                   <input
                     type="text"
                     placeholder="e.g. CRM + HR integration, AI recommendations..."
-                    className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/15 text-white placeholder-white/40 focus:outline-none focus:border-blue-500 text-sm"
+                    className="w-full px-3 py-2 rounded-lg bg-white/15 border border-white/25 text-white placeholder-white/55 focus:outline-none focus:border-blue-400 text-sm"
                   />
                 </div>
 
@@ -182,7 +170,7 @@ export const BannerCTASection: React.FC = () => {
                   Send my details →
                 </Button>
 
-                <div className="text-center text-xs text-white/60 pt-2">
+                <div className="text-center text-xs text-white/80 pt-2">
                   🔒 Your information is private and will never be shared with third parties.
                 </div>
               </form>

@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "../buttons/Button";
 import { X } from "lucide-react";
+import { TopAnnouncementBar } from "./TopAnnouncementBar";
 import "../../styles/deploya.css";
 
 export const Navbar: React.FC = () => {
@@ -22,8 +23,12 @@ export const Navbar: React.FC = () => {
   }, []);
 
   return (
-    <header className="nav-content sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80">
-      <div className="container w-container">
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
+      {/* Running Announcement Bar */}
+      <TopAnnouncementBar />
+
+      <div className="nav-content">
+        <div className="container w-container">
         <div className="nav-wrapper">
           {/* Logo */}
           <Link
@@ -57,7 +62,10 @@ export const Navbar: React.FC = () => {
                 <Link href="/#pricing" className="nav-link w-nav-link">
                   Pricing
                 </Link>
-                <Link href="/#contact" className="nav-link w-nav-link">
+                <Link href="/faq" className="nav-link w-nav-link">
+                  FAQ
+                </Link>
+                <Link href="/contact" className="nav-link w-nav-link">
                   Contact
                 </Link>
               </nav>
@@ -99,16 +107,17 @@ export const Navbar: React.FC = () => {
           </div>
         </div>
       </div>
+    </div>
 
       {/* Mobile Drawer Dropdown Menu */}
       {mobileMenuOpen && (
         <>
           <div
-            className="md:!hidden fixed inset-0 top-[4rem] bg-black/20 backdrop-blur-[2px] z-[9998]"
+            className="md:!hidden fixed inset-0 top-[6.25rem] bg-black/20 backdrop-blur-[2px] z-[9998]"
             onClick={() => setMobileMenuOpen(false)}
             aria-hidden="true"
           />
-          <div className="md:!hidden fixed top-[4rem] left-0 right-0 w-full bg-white/98 backdrop-blur-xl border-b border-slate-200 shadow-2xl px-6 py-6 flex flex-col gap-3 z-[9999] max-h-[calc(100vh-4rem)] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="md:!hidden fixed top-[6.25rem] left-0 right-0 w-full bg-white/98 backdrop-blur-xl border-b border-slate-200 shadow-2xl px-6 py-6 flex flex-col gap-3 z-[9999] max-h-[calc(100vh-6.25rem)] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200">
             <Link
               href="/#features"
               onClick={() => setMobileMenuOpen(false)}
@@ -131,7 +140,14 @@ export const Navbar: React.FC = () => {
               Pricing
             </Link>
             <Link
-              href="/#contact"
+              href="/faq"
+              onClick={() => setMobileMenuOpen(false)}
+              className="nav-link w-nav-link py-2.5 border-b border-slate-100 text-[#0A1E3F]"
+            >
+              FAQ
+            </Link>
+            <Link
+              href="/contact"
               onClick={() => setMobileMenuOpen(false)}
               className="nav-link w-nav-link py-2.5 border-b border-slate-100 text-[#0A1E3F]"
             >

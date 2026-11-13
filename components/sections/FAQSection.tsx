@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Link from "next/link";
 import { Button } from "../buttons/Button";
 
 interface FAQItem {
@@ -8,34 +9,34 @@ interface FAQItem {
 
 const faqs: FAQItem[] = [
   {
-    question: "Why is Salesforce so much more expensive?",
+    question: "What does Zyoris do?",
     answer:
-      "Salesforce was built for Fortune 500 US companies. You are paying for global infrastructure, a US sales team, and enterprise compliance features you simply do not need. Zyoris strips out everything Indian SMBs do not use and passes those savings directly to you.",
+      "Zyoris is India's Intelligent Business Operating System (Business OS). It unifies core business operations (Sales & CRM, HR & Payroll, Accounting & Invoicing, and AI Analytics) into a single synchronized workspace designed specifically for Indian fast-growing companies and mid-market enterprises.",
   },
   {
-    question: "Zoho is cheaper — why not just use that?",
+    question: "How is Zyoris different from Zoho, Salesforce, or HubSpot?",
     answer:
-      "Zoho One has 45+ separate products. Nobody uses them all. Teams get confused, adoption fails, and you end up using 5% of what you paid for. Zyoris is one unified platform — clean, simple, and built so your team will actually use it from day one.",
+      "Zoho has 45+ fragmented apps where data sync often fails, Salesforce charges expensive Western enterprise pricing for unused bloatware, and HubSpot prices scale aggressively. Zyoris provides one clean, unified platform with native Indian GST, rupee payroll, and WhatsApp automation.",
   },
   {
-    question: "Zyoris is new — isn't that a risk?",
+    question: "What core modules are included in Zyoris?",
     answer:
-      "The foundation is already built — security, multi-tenancy, AI, dashboards, all live and production-grade. We are onboarding our first companies with special locked-in pricing and personal onboarding from the founders. Early customers get direct product influence and rates that will never be available again.",
+      "Zyoris includes 5 foundational modules: Sales & CRM Pipeline, HRMS with Automated Rupee Payroll (PF, ESI, TDS), Finance & GST e-Invoicing, Contextual AI Executive Co-Pilot, and Omnichannel Customer Support with WhatsApp & Cloud Telephony.",
   },
   {
-    question: "Will the price increase later?",
+    question: "How much does Zyoris cost and is there a price lock?",
     answer:
-      "Early customers get their rates locked in permanently. The first 50 companies who join will always pay their onboarding price. As the platform matures and more features are added, prices for new customers will rise — but yours will not.",
+      "Pricing starts at ₹4,500/user/month with all modules included. Early adopter companies who onboard during our initial rollout receive a permanent price lock protection: your onboarding rate will remain frozen for life.",
   },
   {
-    question: "What modules are included in Zyoris?",
+    question: "Is our business data secure and DPDP compliant?",
     answer:
-      "Zyoris is India's Intelligent Business OS covering Sales & CRM, HR & People, Finance & Invoicing, AI Insights, and Call Centre in one integrated account with zero tool-switching.",
+      "Yes. Every company's data is strictly isolated through multi-tenant architecture and Row-Level Security (RLS). Hosted in secure Indian datacenters (AWS Mumbai / Azure Central India), 100% compliant with the Digital Personal Data Protection (DPDP) Act 2023. We never train public AI on your proprietary data.",
   },
   {
-    question: "Is our business data secure and isolated?",
+    question: "Can we migrate our existing data from Tally, Zoho, or Excel?",
     answer:
-      "Yes. Every company's data is completely isolated through multi-tenant architecture, JWT auth, role-based access controls, and full audit logging. Your data stays yours, private, and always in your control.",
+      "Yes. We provide pre-built migration utilities and dedicated onboarding specialists to assist in migrating charts of accounts, vendor books, employee records, and customer histories with zero data loss.",
   },
 ];
 
@@ -83,9 +84,10 @@ export const FAQSection: React.FC = () => {
                 <div
                   animate="fade-up-2"
                   data-animate="fade-up-2"
-                  className="home1_faq_banner"
+                  className="home1_faq_banner !grid-cols-1"
                 >
-                  <div className="home1_faq_left">
+                  {/* Demo video temporarily hidden until final video is ready - keep code for later re-enable */}
+                  <div className="home1_faq_left !hidden">
                     <div className="background-video w-background-video w-background-video-atom">
                       <video
                         autoPlay
@@ -171,9 +173,14 @@ export const FAQSection: React.FC = () => {
                       Contact our support team
                     </div>
                     <div className="spacer-small"></div>
-                    <Button href="/contact-v1" variant="secondary">
-                      Contact Us
-                    </Button>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <Button href="/contact" variant="secondary">
+                        Contact Us
+                      </Button>
+                      <Button href="/faq" variant="primary">
+                        View All FAQs →
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -243,6 +250,15 @@ export const FAQSection: React.FC = () => {
                           </div>
                         );
                       })}
+                    </div>
+                    <div className="mt-4 flex items-center justify-end">
+                      <Link
+                        href="/faq"
+                        className="text-sm font-medium text-[#2979FF] hover:text-[#0D47A1] hover:underline flex items-center gap-1.5 transition-colors"
+                      >
+                        <span>View all 50+ FAQs &amp; Knowledge Base</span>
+                        <span aria-hidden="true">→</span>
+                      </Link>
                     </div>
                   </div>
                 </div>

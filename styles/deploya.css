@@ -4760,6 +4760,10 @@ blockquote {
 }
 .home1_banner_content {
   color: var(--color-base--white);
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55);
+}
+.home1_banner_content h2 {
+  color: #fff;
 }
 .home1_banner_links {
   grid-column-gap: 6px;
@@ -4793,7 +4797,12 @@ blockquote {
 .section_home1_layer {
   z-index: 1;
   pointer-events: none;
-  background-image: linear-gradient(#0000 47%, #000);
+  background-image: linear-gradient(
+    to top,
+    rgba(4, 10, 22, 0.5) 0%,
+    rgba(4, 10, 22, 0.28) 45%,
+    rgba(4, 10, 22, 0.16) 100%
+  );
   width: 100%;
   height: 100%;
   position: absolute;
@@ -8422,7 +8431,12 @@ blockquote {
     aspect-ratio: auto;
   }
   .section_home1_layer {
-    background-image: linear-gradient(#0000, #000);
+    background-image: linear-gradient(
+      to top,
+      rgba(4, 10, 22, 0.52) 0%,
+      rgba(4, 10, 22, 0.3) 45%,
+      rgba(4, 10, 22, 0.16) 100%
+    );
   }
   .home1_features_img-wrap {
     aspect-ratio: 3/2;
@@ -9108,7 +9122,12 @@ blockquote {
     grid-template-columns: 1fr;
   }
   .section_home1_layer {
-    background-image: linear-gradient(#0000, #000);
+    background-image: linear-gradient(
+      to top,
+      rgba(4, 10, 22, 0.52) 0%,
+      rgba(4, 10, 22, 0.3) 45%,
+      rgba(4, 10, 22, 0.16) 100%
+    );
   }
   .home1_features_nav {
     grid-column-gap: 8px;

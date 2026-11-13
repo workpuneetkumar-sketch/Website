@@ -166,7 +166,7 @@ export const TestimonialsSection: React.FC = () => {
                       <input
                         type="text"
                         required
-                        placeholder="Company name *"
+                        placeholder="e.g. Zyoris"
                         className="w-full px-3.5 py-2.5 rounded-lg bg-[#F8FAFC] border border-[#D5E3F7] text-[#0A1E3F] placeholder-[#52667D]/60 focus:outline-none focus:border-[#2979FF] focus:bg-white focus:ring-2 focus:ring-[#2979FF]/20 text-sm transition-all"
                       />
                     </div>
@@ -180,7 +180,7 @@ export const TestimonialsSection: React.FC = () => {
                       <input
                         type="email"
                         required
-                        placeholder="Work email *"
+                        placeholder="info@zyoris.com"
                         className="w-full px-3.5 py-2.5 rounded-lg bg-[#F8FAFC] border border-[#D5E3F7] text-[#0A1E3F] placeholder-[#52667D]/60 focus:outline-none focus:border-[#2979FF] focus:bg-white focus:ring-2 focus:ring-[#2979FF]/20 text-sm transition-all"
                       />
                     </div>
@@ -191,7 +191,7 @@ export const TestimonialsSection: React.FC = () => {
                       <input
                         type="tel"
                         required
-                        placeholder="Phone number *"
+                        placeholder="+91 96505 53728"
                         className="w-full px-3.5 py-2.5 rounded-lg bg-[#F8FAFC] border border-[#D5E3F7] text-[#0A1E3F] placeholder-[#52667D]/60 focus:outline-none focus:border-[#2979FF] focus:bg-white focus:ring-2 focus:ring-[#2979FF]/20 text-sm transition-all"
                       />
                     </div>

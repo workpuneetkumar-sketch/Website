@@ -25,16 +25,12 @@ export const HeroSection: React.FC = () => {
       const isMobile = width < 768;
       const isTablet = width >= 768 && width < 1024;
 
-      const minScale = isMobile ? 0.78 : isTablet ? 0.68 : 0.6;
-      const maxScale = isMobile ? 1.03 : isTablet ? 1.12 : 1.18;
-      const minRadius = isMobile ? 14 : 24;
-      const maxRadius = 0;
+      const minScale = isMobile ? 0.75 : isTablet ? 0.70 : 0.68;
+      const maxScale = isMobile ? 1.05 : isTablet ? 1.22 : 1.32;
 
       const scale = minScale + (maxScale - minScale) * eased;
-      const radius = minRadius + (maxRadius - minRadius) * eased;
 
       image.style.transform = `scale(${scale})`;
-      image.style.borderRadius = `${radius}px`;
     };
 
     let ticking = false;
@@ -81,7 +77,7 @@ export const HeroSection: React.FC = () => {
           <div
             animate="load-hero-stagger"
             data-animate="load-hero-stagger"
-            className="max-width-medium align-center text-align-center"
+            className="max-width-medium align-center text-align-center pt-8 pb-10"
           >
             {/* Badge */}
             <div animate="load-hero-1" data-animate="load-hero-1" className="text-style-badge is-badge">
@@ -117,7 +113,7 @@ export const HeroSection: React.FC = () => {
             <div
               animate="load-hero-2"
               data-animate="load-hero-2"
-              className="text-size-medium"
+              className="text-size-medium max-w-xl mx-auto"
             >
               One platform for Sales, HR, Finance and Operations. With AI that tells you what to do next, not just what already happened.
             </div>
@@ -125,7 +121,7 @@ export const HeroSection: React.FC = () => {
             <div className="spacer-small"></div>
 
             {/* Button Group */}
-            <div animate="load-hero-3" data-animate="load-hero-3" className="button-group align-center">
+            <div animate="load-hero-3" data-animate="load-hero-3" className="button-group align-center mt-2">
               <Button href="/#early-access" variant="primary">
                 Request Early Access →
               </Button>
@@ -133,11 +129,9 @@ export const HeroSection: React.FC = () => {
                 See what&apos;s inside
               </Button>
             </div>
-            <br />
-            <br />
-            <br />
+          </div>
 
-            {/* ===== SCROLL ZOOM IMAGE BLOCK ===== */}
+          {/* ===== SCROLL ZOOM IMAGE BLOCK ===== */}
             <section
               ref={pinSectionRef}
               style={{
@@ -154,34 +148,32 @@ export const HeroSection: React.FC = () => {
               <div
                 style={{
                   position: "sticky",
-                  top: 0,
-                  height: "100vh",
-                  width: "calc(100vw - 80px)",
-                  marginLeft: "40px",
-                  marginRight: "40px",
-                  background: "linear-gradient(to right, #a3b7ccff, #e8f1fc)",
+                  top: "6vh",
+                  height: "88vh",
+                  width: "100%",
+                  maxWidth: "min(96vw, 1650px)",
+                  margin: "0 auto",
+                  background: "transparent",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  overflow: "hidden",
+                  overflow: "visible",
                   boxSizing: "border-box",
                 }}
               >
                 <img
                   ref={imageRef}
                   src="/Dashboard.png"
-                  alt="Dashboard preview"
+                  alt="Zyoris Intelligent Business OS Dashboard"
                   style={{
-                    maxWidth: "min(90vw, 1300px)",
-                    maxHeight: "82vh",
                     width: "auto",
                     height: "auto",
+                    maxWidth: "min(90vw, 1300px)",
+                    maxHeight: "82vh",
                     objectFit: "contain",
-                    borderRadius: "10px",
-                    boxShadow: "0 25px 80px rgba(0, 0, 0, 0.3)",
-                    transform: "scale(0.6)",
+                    transform: "scale(0.68)",
                     transformOrigin: "center center",
-                    willChange: "transform, border-radius",
+                    willChange: "transform",
                   }}
                 />
               </div>
@@ -189,7 +181,7 @@ export const HeroSection: React.FC = () => {
             {/* ===== END SCROLL ZOOM IMAGE BLOCK ===== */}
 
             {/* Trust Tagline */}
-            <div className="mt-8 text-[11px] sm:text-xs font-semibold tracking-wider text-[#4A85F6] uppercase">
+            <div className="w-full text-center mt-8 text-[11px] sm:text-xs font-semibold tracking-wider text-[#4A85F6] uppercase">
               Trusted by founders across India &nbsp;·&nbsp; AI-first from day one &nbsp;·&nbsp; 10× faster than spreadsheets
             </div>
 
@@ -204,7 +196,6 @@ export const HeroSection: React.FC = () => {
                 </a>
               ))}
             </div>
-          </div>
           {/* Key Zyoris Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl mx-auto my-8 p-4 rounded-xl bg-blue-50/60 border border-blue-100 text-center">
             <div className="p-3">

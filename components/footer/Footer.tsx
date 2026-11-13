@@ -9,17 +9,12 @@ export const Footer: React.FC = () => {
         <div className="py-6 md:py-8 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-4 lg:gap-8">
           {/* Brand & Confidentiality */}
           <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6 lg:gap-8 text-center sm:text-left">
-            <Link href="/" className="nav-brand w-nav-brand flex items-center gap-2">
-              <div className="flex items-center gap-2.5 font-bold text-xl tracking-tight text-[#0A1E3F]">
-                <img
-                  src="/logo.jpeg"
-                  alt="Zyoris logo"
-                  width={32}
-                  height={32}
-                  className="w-8 h-8 rounded-lg object-cover flex-shrink-0"
-                />
-                <span className="text-[#0A1E3F] font-semibold lowercase tracking-wide text-xl" style={{ letterSpacing: "0.04em" }}>zyoris</span>
-              </div>
+            <Link href="/" className="flex items-center overflow-visible">
+              <img
+                src="/logo.jpeg"
+                alt="Zyoris logo"
+                className="h-9 sm:h-10 w-auto max-w-[180px] object-contain mix-blend-multiply flex-shrink-0"
+              />
             </Link>
             <div className="text-size-tiny text-[#0A1E3F]/70">
               © 2026 Zyoris. Confidential. India&apos;s Intelligent Business OS.
@@ -64,16 +59,16 @@ export const Footer: React.FC = () => {
               About Us
             </Link>
             <Link
-              href="/#careers"
+              href="/careers"
               className="hover:text-[#2979FF] transition-colors duration-200"
             >
               Careers
             </Link>
             <Link
-              href="/#privacy"
+              href="/faq"
               className="hover:text-[#2979FF] transition-colors duration-200"
             >
-              Privacy
+              FAQ
             </Link>
           </nav>
         </div>

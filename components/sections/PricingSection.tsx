@@ -137,7 +137,7 @@ export const PricingSection: React.FC = () => {
             >
               {pricingPlans.map((plan) => (
                 <div key={plan.id} role="listitem" className="w-dyn-item">
-                  <div className={`pricing_card ${plan.popular ? "is-highlighted-plan" : ""}`}>
+                  <div className={`pricing_card group transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:border-[#2979FF]/40 ${plan.popular ? "is-highlighted-plan" : ""}`}>
                     <div className="pricing_card-content">
                       <div className="pricing_card-header">
                         <img

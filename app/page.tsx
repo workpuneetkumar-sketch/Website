@@ -13,6 +13,7 @@ import { PricingSection } from "@/components/sections/PricingSection";
 import { BlogSection } from "@/components/sections/BlogSection";
 import { FAQSection } from "@/components/sections/FAQSection";
 import { BannerCTASection } from "@/components/sections/BannerCTASection";
+import { LaunchOfferModal } from "@/components/modals/LaunchOfferModal";
 import { initAllAnimations } from "@/animations";
 
 export default function HomePage() {
@@ -41,6 +42,7 @@ export default function HomePage() {
         <BannerCTASection />
       </main>
       <Footer />
+      <LaunchOfferModal />
     </div>
   );
 }

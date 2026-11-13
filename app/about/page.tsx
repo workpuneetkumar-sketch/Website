@@ -15,6 +15,9 @@ import {
   Instagram,
   Mail,
   Quote,
+  GraduationCap,
+  Rocket,
+  CheckCircle2,
 } from "lucide-react";
 
 export default function AboutPage() {
@@ -61,7 +64,7 @@ export default function AboutPage() {
                   data-animate="load-hero-2"
                   className="text-size-large text-[#52667D] max-w-2xl mx-auto leading-relaxed"
                 >
-                  We started from a bedroom in Faridabad with a laptop, unstable WiFi, and a belief that Indian businesses deserve better software — built for them, not adapted from elsewhere.
+                  We started from a bedroom in Faridabad with a laptop, unstable WiFi, and a belief that Indian businesses deserve better software, built for them, not adapted from elsewhere.
                 </p>
               </div>
             </div>
@@ -80,7 +83,7 @@ export default function AboutPage() {
                   The Problem We&apos;re Solving
                 </h2>
                 <p className="text-[#52667D] text-base md:text-lg leading-relaxed">
-                  63 million SMBs in India are running on spreadsheets, WhatsApp, and 5–8 disconnected tools. They&apos;re not lacking effort — they&apos;re lacking clarity. That&apos;s what Zyoris fixes.
+                  63 million SMBs in India are running on spreadsheets, WhatsApp, and 5 to 8 disconnected tools. They are not lacking effort, they are lacking clarity. That is what Zyoris fixes.
                 </p>
               </div>
 
@@ -95,7 +98,7 @@ export default function AboutPage() {
                       One Platform
                     </h3>
                     <p className="text-sm md:text-base text-[#52667D] leading-relaxed font-normal">
-                      CRM, HR, Finance, AI Insights — everything in one place. No tool-switching, no copy-pasting data between systems.
+                      CRM, HR, Finance, AI Insights: everything in one place. No tool-switching, no copy-pasting data between systems.
                     </p>
                   </div>
                 </div>
@@ -110,7 +113,7 @@ export default function AboutPage() {
                       Real AI, Not a Gimmick
                     </h3>
                     <p className="text-sm md:text-base text-[#52667D] leading-relaxed font-normal">
-                      Zyoris doesn&apos;t just show data — it tells you what to do next. Revenue forecasting, lead scoring, smart alerts. Included free.
+                      Zyoris does not just show data: it tells you what to do next. Revenue forecasting, lead scoring, smart alerts. Included free.
                     </p>
                   </div>
                 </div>
@@ -125,7 +128,7 @@ export default function AboutPage() {
                       Grows With You
                     </h3>
                     <p className="text-sm md:text-base text-[#52667D] leading-relaxed font-normal">
-                      Start with CRM. Add HR. Add Finance. One platform that expands with your company — no migrations, no data loss.
+                      Start with CRM. Add HR. Add Finance. One platform that expands with your company, with zero migrations and no data loss.
                     </p>
                   </div>
                 </div>
@@ -134,8 +137,40 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* FOUNDER SECTION */}
+        {/* FOUNDER & CEO SECTION (Optimized for Google search: Puneet Kumar Founder & CEO of Zyoris) */}
         <section className="py-16 md:py-24 border-t border-[#D5E3F7]/60 bg-white">
+          {/* JSON-LD Schema for Puneet Kumar Founder and CEO of Zyoris */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Person",
+                name: "Puneet Kumar",
+                alternateName: ["Puneet Munjal", "Puneet Kumar Zyoris"],
+                jobTitle: "Founder & CEO",
+                worksFor: {
+                  "@type": "Organization",
+                  name: "Zyoris",
+                  url: "https://zyoris.com",
+                  description: "India's Intelligent Business Operating System",
+                },
+                url: "https://zyoris.com/about",
+                sameAs: [
+                  "https://www.linkedin.com/in/puneetkumar07",
+                  "https://www.linkedin.com/in/puneetmunjal7",
+                  "https://www.instagram.com/zyoris.technology/",
+                ],
+                alumniOf: "Maharshi Dayanand University",
+                knowsAbout: [
+                  "Business Operating Systems",
+                  "AI & SaaS Architecture",
+                  "Indian SMB Operations",
+                  "Investment Management",
+                ],
+              }),
+            }}
+          />
           <div className="padding-global">
             <div className="container-default max-w-4xl mx-auto">
               {/* Founder Header */}
@@ -143,43 +178,40 @@ export default function AboutPage() {
                 <div className="text-style-badge is-badge mb-2 inline-block">
                   <div>Founder &amp; CEO</div>
                 </div>
-                <h2 className="text-3xl md:text-4xl font-bold text-[#0A1E3F] tracking-tight">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#0A1E3F] tracking-tight">
                   Puneet Kumar
                 </h2>
+                <div className="text-base md:text-lg font-semibold text-[#2979FF] mt-1">
+                  Founder &amp; CEO, Zyoris
+                </div>
                 <div className="flex items-center gap-1.5 text-sm font-medium text-[#52667D] mt-2">
                   <MapPin className="w-4 h-4 text-[#2979FF] flex-shrink-0" />
-                  <span>Faridabad, Haryana, India</span>
+                  <span>Delhi NCR (Faridabad), India</span>
                 </div>
               </div>
 
               {/* Narrative */}
               <div className="space-y-4 text-base md:text-[17px] text-[#52667D] leading-relaxed">
                 <p>
-                  I&apos;m building Zyoris from scratch — no office, no external funding, no co-founder safety net. Just a laptop, a clear vision, and the refusal to wait for permission. Every line of product architecture, every design decision, every hiring call, every pitch — that&apos;s me, right now, every day.
+                  I am building Zyoris from scratch: no bloated corporate bureaucracy, no external investor interference, and no excuses. Just a laptop, a sharp architectural vision, and the refusal to wait for permission. Every line of core system architecture, UI design choice, team mentorship, and product deployment is driven with founder-first focus.
                 </p>
                 <p>
-                  I graduated from Maharshi Dayanand University (MDU), Rohtak, and went deep into things I was curious about rather than things I was told to study. I completed advanced training in investment management at HEC Paris, got Meta certified in digital marketing, and taught myself full-stack product building because I needed to build — not just talk about building.
+                  An alumnus of Maharshi Dayanand University (MDU), Rohtak, I deliberately pursued deep hands-on mastery over conventional theoretical paths. I completed advanced executive training in investment management at HEC Paris, earned Meta certification in digital systems and performance marketing, and self-taught full-stack enterprise architecture because building scalable products requires real execution, not surface-level theory.
                 </p>
                 <p>
-                  Before Zyoris, I spent time studying how Indian businesses actually work: where they lose money, where they waste time, what tools they&apos;re forced to use versus what tools they actually want. The answer kept being the same — they&apos;re surviving on spreadsheets, WhatsApp groups, and disconnected apps because nothing was built for them. I decided to fix that.
+                  Before founding Zyoris, I spent years studying how Indian businesses truly run day-to-day: where revenue leaks, why customer leads fall through the cracks, and why founders struggle with 5 to 8 disconnected software tools. Indian SMBs do not need another bloated Western software with a dollar price tag. They need one cohesive, intelligent operating system built ground-up for their exact realities. That is Zyoris.
                 </p>
 
                 {/* Quote Callout */}
                 <div className="my-8 p-6 md:p-8 bg-[#F0F5FF] border-l-4 border-[#2979FF] rounded-r-2xl shadow-sm">
                   <Quote className="w-7 h-7 text-[#2979FF]/40 mb-2" />
                   <p className="text-lg md:text-xl font-medium text-[#0A1E3F] italic leading-snug">
-                    &ldquo;I&apos;d rather spend 14 hours building something uncertain than 8 hours feeling controlled by someone else&apos;s system.&rdquo;
+                    &ldquo;I would rather spend 14 hours a day building something real and transformative than 8 hours feeling confined inside someone else&apos;s legacy system.&rdquo;
                   </p>
                 </div>
 
                 <p>
-                  Zyoris is not a side project. It&apos;s the main thing — a full-stack business operating system for Indian SMBs that replaces 5–8 tools with one intelligent platform. I&apos;m leading product development, frontend architecture, backend decisions, team building, and business development simultaneously. It&apos;s a lot. That&apos;s the point.
-                </p>
-                <p>
-                  I&apos;m deeply interested in the intersection of AI and business operations — not AI as a buzzword, but AI that actually reduces the decision load on a business owner. Zyoris has real-time revenue forecasting, lead scoring, smart alerts, and anomaly detection built in — not as upsells, but as core features, because I believe intelligence should be the default, not the premium.
-                </p>
-                <p>
-                  Outside the product, I think a lot about what it means to build in India right now. We&apos;re at a rare moment: a generation of founders who actually understand both technology and the Indian market deeply. Zyoris is my bet on that moment.
+                  Zyoris is not a side experiment. It is the flagship mission: a full-stack Intelligent Business Operating System for Indian enterprises that unifies Sales CRM, HRMS, GST Invoicing, and AI Analytics under one roof. Intelligence is our baseline standard, giving every business real-time cash flow forecasting, lead velocity alerts, and predictive recommendations out-of-the-box.
                 </p>
               </div>
 
@@ -304,7 +336,7 @@ export default function AboutPage() {
                       The Build
                     </h3>
                     <p className="text-sm text-[#52667D] leading-relaxed font-normal">
-                      Product development, architecture, and design — all happening in parallel. Real product, real features, real code.
+                      Product development, architecture, and design, all happening in parallel. Real product, real features, real code.
                     </p>
                   </div>
                 </div>
@@ -376,7 +408,7 @@ export default function AboutPage() {
                 </a>
 
                 <a
-                  href="mailto:zyoris.puneet@gmail.com"
+                  href="mailto:info@zyoris.com"
                   className="deploya-card p-6 flex items-center gap-4 rounded-2xl border border-[#D5E3F7]/80 bg-white hover:-translate-y-1.5 hover:shadow-xl hover:shadow-blue-500/10 hover:border-[#2979FF] transition-all duration-300 group"
                 >
                   <div className="w-12 h-12 rounded-xl bg-[#F0F5FF] border border-[#D4E2F5] flex items-center justify-center text-[#2979FF] group-hover:bg-[#2979FF] group-hover:text-white transition-colors flex-shrink-0">
@@ -384,9 +416,72 @@ export default function AboutPage() {
                   </div>
                   <div>
                     <div className="font-bold text-[#0A1E3F] text-base group-hover:text-[#2979FF] transition-colors">Email Us</div>
-                    <div className="text-xs text-[#52667D]">zyoris.puneet@gmail.com</div>
+                    <div className="text-xs text-[#52667D]">info@zyoris.com</div>
                   </div>
                 </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* INTERNS & COLLEGE STUDENTS SECTION (Empowering the next generation with hands-on experience) */}
+        <section className="py-16 md:py-24 border-t border-[#D5E3F7]/60 bg-gradient-to-b from-[#F8FAFC]/50 to-white">
+          <div className="padding-global">
+            <div className="container-default max-w-5xl mx-auto">
+              <div className="text-center max-w-2xl mx-auto mb-14">
+                <div className="text-style-badge is-badge mb-3 inline-block">
+                  <div>Mentorship &amp; Real Growth</div>
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold text-[#0A1E3F] tracking-tight mb-4">
+                  Giving College Students &amp; Interns Real Hands-on Experience
+                </h2>
+                <p className="text-[#52667D] text-base md:text-lg leading-relaxed">
+                  We believe young talent needs real codebases, production deployments, and direct mentorship: not coffee-fetching or certificate-printing rituals.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="deploya-card p-7 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-blue-500/10 hover:border-[#2979FF] border border-[#D5E3F7]/80 rounded-2xl bg-white group">
+                  <div>
+                    <div className="w-12 h-12 rounded-xl bg-[#F0F5FF] border border-[#D4E2F5] flex items-center justify-center text-[#2979FF] mb-5 group-hover:bg-[#2979FF] group-hover:text-white transition-colors duration-200">
+                      <GraduationCap className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-xl font-bold text-[#0A1E3F] mb-2.5 tracking-tight">
+                      Zero College Bias
+                    </h3>
+                    <p className="text-sm md:text-base text-[#52667D] leading-relaxed font-normal">
+                      Whether you study at an IIT or a local tier-3 college in Rohtak or Faridabad, only your drive, consistency, and problem-solving curiosity matter to us.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="deploya-card p-7 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-blue-500/10 hover:border-[#2979FF] border border-[#D5E3F7]/80 rounded-2xl bg-white group">
+                  <div>
+                    <div className="w-12 h-12 rounded-xl bg-[#F0F5FF] border border-[#D4E2F5] flex items-center justify-center text-[#2979FF] mb-5 group-hover:bg-[#2979FF] group-hover:text-white transition-colors duration-200">
+                      <Rocket className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-xl font-bold text-[#0A1E3F] mb-2.5 tracking-tight">
+                      Real Production Code
+                    </h3>
+                    <p className="text-sm md:text-base text-[#52667D] leading-relaxed font-normal">
+                      Interns at Zyoris write features that ship directly to live users: Next.js frontend, Node/Python microservices, AI workflows, and cloud databases.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="deploya-card p-7 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-blue-500/10 hover:border-[#2979FF] border border-[#D5E3F7]/80 rounded-2xl bg-white group">
+                  <div>
+                    <div className="w-12 h-12 rounded-xl bg-[#F0F5FF] border border-[#D4E2F5] flex items-center justify-center text-[#2979FF] mb-5 group-hover:bg-[#2979FF] group-hover:text-white transition-colors duration-200">
+                      <Sparkles className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-xl font-bold text-[#0A1E3F] mb-2.5 tracking-tight">
+                      Direct Founder Mentorship
+                    </h3>
+                    <p className="text-sm md:text-base text-[#52667D] leading-relaxed font-normal">
+                      Work directly with Puneet Kumar on system architecture, design decisions, and startup mechanics to fast-track your engineering maturity.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -398,16 +493,16 @@ export default function AboutPage() {
             <div className="container-default">
               <div className="max-w-2xl mx-auto text-center p-8 md:p-14 bg-white border border-[#D5E3F7] rounded-3xl shadow-xl shadow-blue-500/5">
                 <h2 className="text-3xl md:text-4xl font-bold text-[#0A1E3F] tracking-tight mb-3">
-                  Want to Join the Team?
+                  Want to Build with Zyoris?
                 </h2>
                 <p className="text-[#52667D] text-base md:text-lg mb-8 leading-relaxed">
-                  We&apos;re hiring developers, designers, and builders who want to work on real products.
+                  Whether you are an ambitious student seeking an internship or an experienced builder, we would love to hear from you.
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                  <Button href="/#careers" variant="primary">
-                    View Open Positions →
+                  <Button href="/careers" variant="primary">
+                    Apply for Internship / Roles →
                   </Button>
-                  <Button href="/#contact" variant="secondary">
+                  <Button href="/contact" variant="secondary">
                     Get in Touch
                   </Button>
                 </div>

@@ -198,7 +198,7 @@ export const FeaturesSection: React.FC = () => {
               </div>
 
               {/* 6 Left Headings / Nav Items */}
-              <div className="home1_features_nav w-full">
+              <div className="home1_features_nav w-full max-w-lg mt-2 space-y-1">
                 {featureItems.map((item, index) => {
                   const isActive = activeId === item.id;
                   const isLast = index === featureItems.length - 1;
@@ -208,39 +208,45 @@ export const FeaturesSection: React.FC = () => {
                       key={item.id}
                       href={`#${item.id}`}
                       onClick={(e) => scrollToCard(item.id, e)}
-                      className={`home1_features_link w-inline-block transition-all duration-200 cursor-pointer !opacity-100 ${
-                        isActive ? "is-active" : ""
+                      className={`home1_features_link w-inline-block transition-all duration-300 cursor-pointer !opacity-100 flex items-start gap-4 p-4 rounded-2xl ${
+                        isActive
+                          ? "is-active bg-white border border-[#2979FF]/30 shadow-lg shadow-blue-500/10 scale-[1.02]"
+                          : "hover:bg-white/60 border border-transparent opacity-60 hover:opacity-90"
                       }`}
                     >
-                      <div className="home1_features_link-decor flex flex-col items-center">
+                      <div className="home1_features_link-decor flex flex-col items-center pt-1.5 flex-shrink-0">
                         <div
                           className={`home1_features_link-dot rounded-full transition-all duration-300 ${
                             isActive
-                              ? "bg-[#0D47A1] scale-125 ring-4 ring-blue-100"
-                              : "bg-[#0A1E3F]/40"
+                              ? "bg-[#2979FF] scale-125 ring-4 ring-[#2979FF]/20 shadow-sm"
+                              : "bg-[#0A1E3F]/30"
                           }`}
-                          style={{ width: "8px", height: "8px" }}
+                          style={{ width: "12px", height: "12px" }}
                         ></div>
                         {!isLast && (
                           <div
-                            className={`home1_features_link-line transition-colors duration-300 ${
-                              isActive ? "bg-blue-300" : "bg-blue-100"
+                            className={`home1_features_link-line transition-colors duration-300 my-1 ${
+                              isActive ? "bg-[#2979FF]" : "bg-slate-200"
                             }`}
-                            style={{ width: "1px", minHeight: "44px" }}
+                            style={{ width: "2px", minHeight: "64px" }}
                           ></div>
                         )}
                       </div>
-                      <div className="home1_features_text pb-4">
+                      <div className="home1_features_text pb-1 flex-1">
                         <div
-                          className={`text-base transition-colors duration-200 text-black ${
+                          className={`text-xl md:text-2xl transition-colors duration-200 tracking-tight leading-snug ${
                             isActive
-                              ? "font-semibold"
-                              : "font-normal"
+                              ? "font-bold text-[#0D47A1]"
+                              : "font-semibold text-[#0A1E3F]/80"
                           }`}
                         >
                           {item.title}
                         </div>
-                        <div className="text-xs text-black line-clamp-2 mt-0.5 leading-relaxed">
+                        <div
+                          className={`text-base md:text-[16px] mt-1.5 leading-relaxed transition-colors duration-200 ${
+                            isActive ? "text-[#334155] font-normal" : "text-[#64748B]"
+                          }`}
+                        >
                           {item.desc}
                         </div>
                       </div>

@@ -392,6 +392,12 @@ a:hover {
   min-height: 5.5rem !important;
   background-color: var(--secondary) !important;
   border: 1px solid var(--color-neutral--shade-400) !important;
+  transition: all 0.25s ease !important;
+}
+
+.pricing_card:hover .pricing_card-header {
+  background-color: #EBF3FF !important;
+  border-color: #2979FF !important;
 }
 
 .pricing_card-icon {
@@ -458,4 +464,23 @@ a:hover {
   .pricing_list {
     grid-template-columns: 1fr !important;
   }
+}
+
+@keyframes marqueeRunning {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-running {
+  display: flex;
+  width: max-content;
+  animation: marqueeRunning 28s linear infinite;
+}
+
+.animate-marquee-running:hover {
+  animation-play-state: paused;
 }
