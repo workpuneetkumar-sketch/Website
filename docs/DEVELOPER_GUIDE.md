@@ -157,6 +157,9 @@ Website/
    - Created dynamic `app/robots.ts` (`/robots.txt`) with strict Googlebot directives allowing public marketing pages while blocking internal API endpoints (`/api/*`).
    - Created dynamic `app/sitemap.ts` (`/sitemap.xml`) registering all primary marketing pages with priority scores (1.0 to 0.6).
    - Added `alternates.canonical` to `app/layout.tsx` to resolve Search Console duplicate URL and redirect warnings.
+6. **Navbar Responsive Polish & Popup Routing**:
+   - Removed awkward vertical divider (`border-right`) on `nav-menu-wrapper` in both `components/navbar/Navbar.tsx` and `app/globals.css` ensuring clean spacing on small tabs / laptops.
+   - Redirected Launch Offer modal (`LaunchOfferModal.tsx`) and Top Announcement bar (`TopAnnouncementBar.tsx`) CTAs directly to the contact page (`/contact?offer=ZyorisNew`) instead of the payment checkout page.
 
 ---
 

@@ -328,6 +328,8 @@ a:hover {
   header.nav-content .nav-menu-wrapper {
     display: flex !important;
     visibility: visible !important;
+    border-right: none !important;
+    border: none !important;
   }
 
   header.nav-content .nav-menu {

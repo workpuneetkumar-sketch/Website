@@ -48,7 +48,7 @@ export const Navbar: React.FC = () => {
 
           {/* Nav Right */}
           <div className="nav-right">
-            <div className="nav-menu-wrapper !hidden md:!flex">
+            <div className="nav-menu-wrapper !hidden md:!flex !border-r-0">
               <nav
                 role="navigation"
                 className="nav-menu w-nav-menu !hidden md:!flex items-center"
