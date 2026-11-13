@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { Button } from "../buttons/Button";
+import { PhoneOtpVerifier } from "../auth/PhoneOtpVerifier";
 
 export const TestimonialsSection: React.FC = () => {
+  const [phone, setPhone] = useState("");
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isPhoneVerified) return;
     setSubmitted(true);
   };
 
@@ -191,20 +195,32 @@ export const TestimonialsSection: React.FC = () => {
                       <input
                         type="tel"
                         required
+                        value={phone}
+                        onChange={(e) => {
+                          setPhone(e.target.value);
+                          setIsPhoneVerified(false);
+                        }}
                         placeholder="+91 96505 53728"
                         className="w-full px-3.5 py-2.5 rounded-lg bg-[#F8FAFC] border border-[#D5E3F7] text-[#0A1E3F] placeholder-[#52667D]/60 focus:outline-none focus:border-[#2979FF] focus:bg-white focus:ring-2 focus:ring-[#2979FF]/20 text-sm transition-all"
+                      />
+                      <PhoneOtpVerifier
+                        phoneNumber={phone}
+                        isVerified={isPhoneVerified}
+                        onVerified={(verified) => setIsPhoneVerified(verified)}
                       />
                     </div>
                   </div>
 
                   <div className="pt-2">
-                    <Button
+                    <button
                       type="submit"
-                      variant="primary"
-                      className="w-full py-3 text-center font-semibold text-sm md:text-base"
+                      disabled={!isPhoneVerified}
+                      className="w-full py-3 px-6 rounded-xl bg-[#0D47A1] hover:bg-[#0A1E3F] disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed text-white text-center font-semibold text-sm md:text-base transition-all duration-200 cursor-pointer shadow-md"
                     >
-                      Request Early Access
-                    </Button>
+                      {isPhoneVerified
+                        ? "Request Early Access →"
+                        : "Verify Phone via OTP to Continue"}
+                    </button>
                   </div>
 
                   

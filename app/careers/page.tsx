@@ -16,6 +16,7 @@ import {
   Lightbulb,
   Zap,
 } from "lucide-react";
+import { PhoneOtpVerifier } from "@/components/auth/PhoneOtpVerifier";
 
 export default function CareersPage() {
   const [formData, setFormData] = useState({
@@ -28,6 +29,7 @@ export default function CareersPage() {
     whyJoin: "",
   });
 
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -253,9 +255,17 @@ export default function CareersPage() {
                             type="tel"
                             required
                             value={formData.phone}
-                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                            onChange={(e) => {
+                              setFormData({ ...formData, phone: e.target.value });
+                              setIsPhoneVerified(false);
+                            }}
                             placeholder="+91 98765 43210"
                             className="w-full px-4 py-3 rounded-xl border border-[#C2D4EE] text-[#0A1E3F] text-sm focus:outline-none focus:border-[#2979FF] bg-slate-50/50"
+                          />
+                          <PhoneOtpVerifier
+                            phoneNumber={formData.phone}
+                            isVerified={isPhoneVerified}
+                            onVerified={(verified) => setIsPhoneVerified(verified)}
                           />
                         </div>
                       </div>
@@ -321,10 +331,15 @@ export default function CareersPage() {
                       <div className="pt-2">
                         <button
                           type="submit"
-                          className="w-full py-3.5 px-6 rounded-xl bg-[#0D47A1] hover:bg-[#0A1E3F] text-white font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+                          disabled={!isPhoneVerified}
+                          className="w-full py-3.5 px-6 rounded-xl bg-[#0D47A1] hover:bg-[#0A1E3F] disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg cursor-pointer"
                         >
                           <Send className="w-4 h-4" />
-                          <span>Submit Application to hr@zyoris.com</span>
+                          <span>
+                            {isPhoneVerified
+                              ? "Submit Application to hr@zyoris.com"
+                              : "Verify Phone via OTP to Submit"}
+                          </span>
                         </button>
                       </div>
                     </form>

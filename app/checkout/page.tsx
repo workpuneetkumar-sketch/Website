@@ -23,6 +23,7 @@ import {
   Tag,
   Percent,
 } from "lucide-react";
+import { PhoneOtpVerifier } from "@/components/auth/PhoneOtpVerifier";
 
 interface PlanConfig {
   id: string;
@@ -128,6 +129,7 @@ function CheckoutContent() {
   });
 
   const [paymentMethod, setPaymentMethod] = useState<"upi" | "card" | "netbanking" | "invoice">("upi");
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
 
@@ -637,11 +639,19 @@ function CheckoutContent() {
                         type="tel"
                         name="phone"
                         value={formData.phone}
-                        onChange={handleChange}
+                        onChange={(e) => {
+                          handleChange(e);
+                          setIsPhoneVerified(false);
+                        }}
                         placeholder="+91 98765 43210"
                         className="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-xl focus:border-[#2979FF] focus:ring-2 focus:ring-blue-100 outline-none"
                       />
                     </div>
+                    <PhoneOtpVerifier
+                      phoneNumber={formData.phone}
+                      isVerified={isPhoneVerified}
+                      onVerified={(verified) => setIsPhoneVerified(verified)}
+                    />
                   </div>
 
                   <div>
@@ -841,11 +851,13 @@ function CheckoutContent() {
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="w-full py-4 px-6 rounded-2xl bg-[#2979FF] hover:bg-[#0D47A1] text-white font-bold text-base md:text-lg transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2 disabled:opacity-70 cursor-pointer"
+                disabled={isSubmitting || !isPhoneVerified}
+                className="w-full py-4 px-6 rounded-2xl bg-[#2979FF] hover:bg-[#0D47A1] disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed text-white font-bold text-base md:text-lg transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2 cursor-pointer"
               >
                 {isSubmitting ? (
                   <span>{grandTotal === 0 ? "Activating Your Free Workspace..." : "Opening Razorpay Gateway..."}</span>
+                ) : !isPhoneVerified ? (
+                  <span>Verify Phone via OTP to Continue Checkout</span>
                 ) : grandTotal === 0 ? (
                   <>
                     <span>Activate 1 Month Free Workspace (₹0)</span>

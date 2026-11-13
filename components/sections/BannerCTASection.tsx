@@ -1,8 +1,12 @@
 import React, { useRef, useState } from "react";
 import { Button } from "../buttons/Button";
+import { PhoneOtpVerifier } from "../auth/PhoneOtpVerifier";
 
 export const BannerCTASection: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(true);
+  const [phone, setPhone] = useState("");
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const toggleVideo = () => {
@@ -141,8 +145,19 @@ export const BannerCTASection: React.FC = () => {
                     <input
                       type="tel"
                       required
+                      value={phone}
+                      onChange={(e) => {
+                        setPhone(e.target.value);
+                        setIsPhoneVerified(false);
+                      }}
                       placeholder="+91 96505 53728"
                       className="w-full px-3 py-2 rounded-lg bg-white/15 border border-white/25 text-white placeholder-white/55 focus:outline-none focus:border-blue-400 text-sm"
+                    />
+                    <PhoneOtpVerifier
+                      phoneNumber={phone}
+                      isVerified={isPhoneVerified}
+                      onVerified={(verified) => setIsPhoneVerified(verified)}
+                      theme="dark"
                     />
                   </div>
                 </div>
@@ -166,9 +181,17 @@ export const BannerCTASection: React.FC = () => {
                   />
                 </div>
 
-                <Button variant="primary" className="w-full py-3 text-center font-medium">
-                  Send my details →
-                </Button>
+                <button
+                  type="submit"
+                  disabled={!isPhoneVerified}
+                  className="w-full py-3.5 px-6 rounded-xl bg-[#2979FF] hover:bg-[#1E70FF] disabled:bg-white/20 disabled:text-white/40 disabled:cursor-not-allowed text-white font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-lg cursor-pointer"
+                >
+                  <span>
+                    {isPhoneVerified
+                      ? "Send my details →"
+                      : "Verify Phone via OTP to Continue"}
+                  </span>
+                </button>
 
                 <div className="text-center text-xs text-white/80 pt-2">
                   🔒 Your information is private and will never be shared with third parties.
