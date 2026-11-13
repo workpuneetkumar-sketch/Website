@@ -1,8 +1,9 @@
+# *
 User-agent: *
 Allow: /
-Allow: /faq
-Allow: /pricing
-Allow: /about
-Allow: /contact-v1
-Allow: /careers
+
+# Host
+Host: https://zyoris.com
+
+# Sitemaps
 Sitemap: https://zyoris.com/sitemap.xml

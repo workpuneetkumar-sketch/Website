@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { usePathname } from "next/navigation";
 import "./globals.css";
-import "../styles/deploya.css"
+import "../styles/deploya.css";
 import { Michroma } from "next/font/google";
 
 const michroma = Michroma({
@@ -16,7 +15,8 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   title: "Zyoris | India's AI-Powered Business OS — CRM, HR, Finance in One Platform",
-  description: "Zyoris is India's first Intelligent Business Operating System. One platform for Sales & CRM, HR, Finance, and AI Insights. Starting at ₹4,500/user/month. Built for Indian SMBs.",
+  description:
+    "Zyoris is India's first Intelligent Business Operating System. One platform for Sales & CRM, HR, Finance, and AI Insights. Starting at ₹4,500/user/month. Built for Indian SMBs.",
   keywords: [
     "best crm",
     "best crm in india",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     "gst billing accounting crm",
     "zoho alternative",
     "salesforce alternative india",
-    "lead management software"
+    "lead management software",
   ],
   icons: {
     icon: "/logoMain.jpeg",
@@ -45,7 +45,8 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Zyoris | India's AI-Powered Business OS — Best CRM, HRMS & Finance",
-    description: "Zyoris is India's Intelligent Business OS. Best CRM software for Indian SMBs & fast-growing enterprises with AI deal scoring, automated pipeline, HR payroll and GST invoicing.",
+    description:
+      "Zyoris is India's Intelligent Business OS. Best CRM software for Indian SMBs & fast-growing enterprises with AI deal scoring, automated pipeline, HR payroll and GST invoicing.",
     url: "https://zyoris.com/",
     siteName: "Zyoris",
     images: [
@@ -56,6 +57,13 @@ export const metadata: Metadata = {
         alt: "Zyoris Logo",
       },
     ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Zyoris | India's AI-Powered Business OS — Best CRM, HRMS & Finance",
+    description:
+      "Zyoris is India's Intelligent Business OS. Best CRM software for Indian SMBs & fast-growing enterprises with AI deal scoring, automated pipeline, HR payroll and GST invoicing.",
+    images: ["/logoMain.jpeg"],
   },
 };
 
@@ -95,19 +103,23 @@ export default function RootLayout({
                     "@type": "Person",
                     "@id": "https://zyoris.com/#founder",
                     name: "Puneet Kumar",
-                    alternateName: ["Puneet Munjal", "Puneet Kumar Zyoris", "Puneet Munjal Zyoris"],
+                    alternateName: [
+                      "Puneet Munjal",
+                      "Puneet Kumar Zyoris",
+                      "Puneet Munjal Zyoris",
+                    ],
                     jobTitle: "Founder & CEO",
                     url: "https://zyoris.com/about",
                     sameAs: [
                       "https://www.linkedin.com/in/puneetkumar07",
-                      "https://www.linkedin.com/in/puneetmunjal7"
-                    ]
+                      "https://www.linkedin.com/in/puneetmunjal7",
+                    ],
                   },
                   address: {
                     "@type": "PostalAddress",
                     addressLocality: "Faridabad",
                     addressRegion: "Haryana",
-                    addressCountry: "IN"
+                    addressCountry: "IN",
                   },
                   contactPoint: [
                     {
@@ -116,13 +128,13 @@ export default function RootLayout({
                       contactType: "customer service",
                       email: "info@zyoris.com",
                       areaServed: "IN",
-                      availableLanguage: ["English", "Hindi"]
-                    }
+                      availableLanguage: ["English", "Hindi"],
+                    },
                   ],
                   sameAs: [
                     "https://in.linkedin.com/company/zyoris",
-                    "https://www.instagram.com/zyoris.official/"
-                  ]
+                    "https://www.instagram.com/zyoris.official/",
+                  ],
                 },
                 {
                   "@type": "SoftwareApplication",
@@ -130,8 +142,10 @@ export default function RootLayout({
                   name: "Zyoris Business OS",
                   applicationCategory: "BusinessApplication, CRMApplication",
                   operatingSystem: "Cloud, Web-based, All Browsers, Mobile",
-                  keywords: "best crm, simple crm, best crm in india, best crm for small business, crm software india, sales crm, ai crm, hrms software, gst invoicing software, business operating system, zyoris",
-                  description: "Best CRM and unified Intelligent Business Operating System for Indian SMBs and mid-market enterprises. Features automated sales pipeline, AI lead scoring, WhatsApp integration, HR payroll with compliance, and GST accounting.",
+                  keywords:
+                    "best crm, simple crm, best crm in india, best crm for small business, crm software india, sales crm, ai crm, hrms software, gst invoicing software, business operating system, zyoris",
+                  description:
+                    "Best CRM and unified Intelligent Business Operating System for Indian SMBs and mid-market enterprises. Features automated sales pipeline, AI lead scoring, WhatsApp integration, HR payroll with compliance, and GST accounting.",
                   offers: {
                     "@type": "Offer",
                     price: "4500",
@@ -140,8 +154,8 @@ export default function RootLayout({
                       "@type": "UnitPriceSpecification",
                       price: "4500",
                       priceCurrency: "INR",
-                      unitText: "USER_PER_MONTH"
-                    }
+                      unitText: "USER_PER_MONTH",
+                    },
                   },
                   featureList: [
                     "Best CRM for Indian SMBs & Mid-Market Enterprises",
@@ -152,8 +166,8 @@ export default function RootLayout({
                     "India HRMS & One-Click Automated Payroll (PF, ESI, TDS)",
                     "GST-Compliant Invoicing, E-Invoicing & Accounting",
                     "Executive KPI Dashboards, ARR/MRR & Cash Flow Runway",
-                    "Real-Time Multi-Branch & Multi-Tenant Architecture"
-                  ]
+                    "Real-Time Multi-Branch & Multi-Tenant Architecture",
+                  ],
                 },
                 {
                   "@type": "WebSite",
@@ -161,19 +175,16 @@ export default function RootLayout({
                   url: "https://zyoris.com",
                   name: "Zyoris",
                   publisher: {
-                    "@id": "https://zyoris.com/#organization"
-                  }
-                }
-              ]
+                    "@id": "https://zyoris.com/#organization",
+                  },
+                },
+              ],
             }),
           }}
         />
-      <link rel="canonical" href={`https://zyoris.com${usePathname()}`} />
-</head>
+      </head>
       <body className={michroma.variable}>
-        <div className="page-wrapper">
-          {children}
-        </div>
+        <div className="page-wrapper">{children}</div>
       </body>
     </html>
   );
