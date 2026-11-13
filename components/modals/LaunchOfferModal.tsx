@@ -77,9 +77,14 @@ export const LaunchOfferModal: React.FC = () => {
             Get <span className="text-[#2979FF]">1 Month 100% FREE</span> for 3 to 5 Team Users!
           </h2>
 
-          <p className="text-[#52667D] text-sm sm:text-base leading-relaxed mb-6">
-            We are welcoming our next cohort of ambitious founders. Experience Zyoris Intelligent Business OS with complete platform access, AI leads scoring, and role dashboards at <strong>₹0 cost</strong> for your first month (valid on 3–5 team seats).
+          <p className="text-[#52667D] text-sm sm:text-base leading-relaxed mb-4">
+            Experience Zyoris Intelligent Business OS with complete platform access at <strong>₹0 cost</strong> for your first month (valid on 3–5 team seats). Seats above 5 are billed at regular pricing.
           </p>
+
+          {/* Terms callout */}
+          <div className="bg-amber-50/90 border border-amber-200/80 rounded-xl p-3 mb-5 text-[11px] text-amber-900 leading-snug">
+            <strong>Active User Policy:</strong> All registered seats must remain active. Accounts inactive for more than 1 week (7 days) will be automatically paused.
+          </div>
 
           {/* Coupon Code Highlight Box */}
           <div className="bg-[#F0F6FF]/90 border-2 border-dashed border-[#2979FF]/40 rounded-2xl p-4 sm:p-5 mb-6 text-center relative group">
