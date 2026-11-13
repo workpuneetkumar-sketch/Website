@@ -137,11 +137,11 @@ export const LaunchOfferModal: React.FC = () => {
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row items-center gap-3">
             <Link
-              href="/contact?offer=ZyorisNew"
+              href="/checkout?plan=starter&coupon=ZyorisNew&users=3"
               onClick={handleClose}
               className="w-full sm:flex-1 py-3.5 px-5 rounded-xl bg-[#1E70FF] hover:bg-[#0D47A1] text-white font-bold text-center text-sm sm:text-base transition-all shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2 cursor-pointer"
             >
-              <span>Claim Free Month</span>
+              <span>Claim Free Month & Setup Autopay</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
 

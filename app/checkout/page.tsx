@@ -22,6 +22,8 @@ import {
   Sparkles,
   Tag,
   Percent,
+  RefreshCw,
+  Calendar,
 } from "lucide-react";
 import { EmailOtpVerifier } from "@/components/auth/EmailOtpVerifier";
 
@@ -99,19 +101,31 @@ const INDIAN_STATES = [
 
 function CheckoutContent() {
   const searchParams = useSearchParams();
-  const initialPlanId = searchParams.get("plan") || "growth";
-  const [selectedPlanId, setSelectedPlanId] = useState<string>(
-    PLANS[initialPlanId] ? initialPlanId : "growth"
-  );
-
-  const plan = PLANS[selectedPlanId] || PLANS.growth;
-  const initialCoupon = searchParams.get("coupon");
+  const initialPlan = searchParams.get("plan") || "starter";
+  const initialCoupon = searchParams.get("coupon") || "";
   const initialUsersParam = searchParams.get("users");
+  const initialCycle = searchParams.get("cycle") === "annual" ? "annual" : "monthly";
 
-  const [userCount, setUserCount] = useState<number>(
-    initialUsersParam ? parseInt(initialUsersParam) || plan.defaultUsers : plan.defaultUsers
+  const [selectedPlanId, setSelectedPlanId] = useState<string>(
+    PLANS[initialPlan] ? initialPlan : "starter"
   );
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">("monthly");
+  const plan = PLANS[selectedPlanId] || PLANS.starter;
+
+  // Pricing inputs
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">(initialCycle);
+  const [userCount, setUserCount] = useState<number>(() => {
+    if (initialUsersParam) {
+      const parsed = parseInt(initialUsersParam);
+      if (!isNaN(parsed) && parsed > 0) return parsed;
+    }
+    if (initialCoupon.toUpperCase() === "ZYORISNEW") {
+      return 3;
+    }
+    return plan.defaultUsers;
+  });
+
+  // Autopay mandated by default (60 months)
+  const [enableAutopay, setEnableAutopay] = useState<boolean>(true);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -128,7 +142,7 @@ function CheckoutContent() {
     pan: "",
   });
 
-  const [paymentMethod, setPaymentMethod] = useState<"upi" | "card" | "netbanking" | "invoice">("upi");
+  const [paymentMethod, setPaymentMethod] = useState<"upi" | "card" | "netbanking">("upi");
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
@@ -136,17 +150,18 @@ function CheckoutContent() {
   const [paymentDetails, setPaymentDetails] = useState<{
     paymentId?: string;
     orderId?: string;
+    subscriptionId?: string;
   }>({});
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Available valid discount coupons (Min 3 users required for coupons)
+  // Available valid discount coupons
   const VALID_COUPONS: Record<
     string,
     { discountPercent: number; description: string; minUsers: number; maxFreeUsers?: number }
   > = {
     ZYORISNEW: {
       discountPercent: 100,
-      description: "100% OFF First Month (For 3 to 5 users)",
+      description: "1st Month 100% FREE (For 3 to 5 users) with 60-Month Autopay",
       minUsers: 3,
       maxFreeUsers: 5,
     },
@@ -168,7 +183,9 @@ function CheckoutContent() {
   } | null>(() => {
     if (initialCoupon && VALID_COUPONS[initialCoupon.toUpperCase()]) {
       const cfg = VALID_COUPONS[initialCoupon.toUpperCase()];
-      const seats = initialUsersParam ? parseInt(initialUsersParam) || plan.defaultUsers : plan.defaultUsers;
+      const seats = initialUsersParam
+        ? parseInt(initialUsersParam) || plan.defaultUsers
+        : plan.defaultUsers;
       if (seats >= cfg.minUsers) {
         return {
           code: initialCoupon.toUpperCase(),
@@ -213,17 +230,17 @@ function CheckoutContent() {
   };
 
   // Calculations
+  const isFreeTrialCoupon = appliedCoupon?.code === "ZYORISNEW";
   const annualDiscountMultiplier = billingCycle === "annual" ? 0.92 : 1; // 8% discount on annual
   const monthlyBase = plan.pricePerUser * userCount;
   const baseBeforeCoupon = Math.round(
     monthlyBase * (billingCycle === "annual" ? 12 : 1) * annualDiscountMultiplier
   );
 
-  // If ZYORISNEW (100% off for 3 to 5 users for 1 month)
   let couponDiscountAmount = 0;
   if (appliedCoupon && userCount >= (appliedCoupon.minUsers || 3)) {
     if (appliedCoupon.code === "ZYORISNEW") {
-      // 100% free for up to 5 seats for 1 month
+      // 100% free for up to 5 seats for month 1
       const freeSeats = Math.min(userCount, 5);
       const freeSeatValue = plan.pricePerUser * freeSeats;
       couponDiscountAmount = Math.min(baseBeforeCoupon, freeSeatValue);
@@ -238,6 +255,13 @@ function CheckoutContent() {
   const gst = Math.round(subtotal * 0.18);
   const grandTotal = subtotal + gst;
 
+  // Recurring amount after free month
+  const recurringSubtotal = Math.round(
+    monthlyBase * (billingCycle === "annual" ? 12 : 1) * annualDiscountMultiplier
+  );
+  const recurringGst = Math.round(recurringSubtotal * 0.18);
+  const recurringGrandTotal = recurringSubtotal + recurringGst;
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -249,21 +273,115 @@ function CheckoutContent() {
     setErrorMessage(null);
     setIsSubmitting(true);
 
-    // If 100% Free Offer (Grand Total is 0)
-    if (grandTotal === 0) {
-      setTimeout(() => {
-        setPaymentDetails({
-          paymentId: `FREE-${appliedCoupon?.code || "PROMO"}-${Date.now().toString().slice(-6)}`,
-          orderId: `FREE_ORD_${Date.now()}`,
-        });
-        setOrderPlaced(true);
-        setIsSubmitting(false);
-      }, 900);
-      return;
-    }
-
     try {
-      // 1. Create order on backend API
+      // Case A: Recurring Autopay flow (60 monthly cycles via Razorpay Subscriptions)
+      if (enableAutopay) {
+        const subRes = await fetch("/api/razorpay/create-subscription", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            planId: plan.id,
+            billingCycle,
+            userCount,
+            totalCount: billingCycle === "annual" ? 5 : 60, // 60 cycles = 5 years
+            isFreeTrialOffer: isFreeTrialCoupon && grandTotal === 0,
+            customerDetails: {
+              name: formData.fullName,
+              email: formData.workEmail,
+              contact: formData.phone,
+              company: formData.companyName,
+              gstin: formData.gstin || "",
+            },
+            notes: {
+              planName: plan.name,
+              seats: userCount,
+              company: formData.companyName,
+              appliedCoupon: appliedCoupon?.code || "NONE",
+            },
+          }),
+        });
+
+        const subData = await subRes.json();
+        if (!subRes.ok || !subData.subscriptionId) {
+          throw new Error(subData.error || "Failed to initialize Autopay subscription");
+        }
+
+        const options = {
+          key: subData.keyId,
+          subscription_id: subData.subscriptionId,
+          name: "Zyoris Business OS",
+          description: isFreeTrialCoupon
+            ? `1st Month Free · Then ₹${recurringGrandTotal.toLocaleString("en-IN")}/mo (60-Mo Autopay)`
+            : `${plan.name} (${userCount} seats · 60-Month Autopay)`,
+          image: "/logo.jpeg",
+          prefill: {
+            name: formData.fullName,
+            email: formData.workEmail,
+            contact: formData.phone,
+          },
+          notes: {
+            company: formData.companyName,
+            gstin: formData.gstin || "N/A",
+          },
+          theme: {
+            color: "#2979FF",
+          },
+          handler: async function (response: any) {
+            try {
+              const verifyRes = await fetch("/api/razorpay/verify-subscription", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_subscription_id: response.razorpay_subscription_id,
+                  razorpay_signature: response.razorpay_signature,
+                }),
+              });
+
+              const verifyData = await verifyRes.json();
+              if (verifyData.success) {
+                setPaymentDetails({
+                  paymentId: response.razorpay_payment_id,
+                  subscriptionId: response.razorpay_subscription_id,
+                });
+                setOrderPlaced(true);
+              } else {
+                setErrorMessage("Autopay verification failed. Please contact support.");
+              }
+            } catch (vErr) {
+              console.error("Autopay verify error:", vErr);
+              setPaymentDetails({
+                paymentId: response.razorpay_payment_id,
+                subscriptionId: response.razorpay_subscription_id,
+              });
+              setOrderPlaced(true);
+            } finally {
+              setIsSubmitting(false);
+            }
+          },
+          modal: {
+            ondismiss: function () {
+              setIsSubmitting(false);
+            },
+          },
+        };
+
+        if ((window as any).Razorpay) {
+          const rzp = new (window as any).Razorpay(options);
+          rzp.on("payment.failed", function (failResponse: any) {
+            setIsSubmitting(false);
+            setErrorMessage(
+              failResponse.error?.description || "Autopay authorization failed. Please try again."
+            );
+          });
+          rzp.open();
+        } else {
+          throw new Error("Razorpay SDK not loaded. Please refresh and try again.");
+        }
+        return;
+      }
+
+      // Case B: Standard One-Time Razorpay Order (if autopay toggled off)
       const res = await fetch("/api/razorpay/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -282,12 +400,10 @@ function CheckoutContent() {
       });
 
       const orderData = await res.json();
-
       if (!res.ok || !orderData.orderId) {
         throw new Error(orderData.error || "Failed to initialize payment gateway");
       }
 
-      // 2. Open Razorpay standard checkout modal
       const options = {
         key: orderData.keyId,
         amount: orderData.amount,
@@ -310,7 +426,6 @@ function CheckoutContent() {
         },
         handler: async function (response: any) {
           try {
-            // 3. Verify signature on backend
             const verifyRes = await fetch("/api/razorpay/verify", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -322,7 +437,6 @@ function CheckoutContent() {
             });
 
             const verifyData = await verifyRes.json();
-
             if (verifyData.success) {
               setPaymentDetails({
                 paymentId: response.razorpay_payment_id,
@@ -334,7 +448,6 @@ function CheckoutContent() {
             }
           } catch (err) {
             console.error("Verification error:", err);
-            // Even if verification network drops, record payment ID
             setPaymentDetails({
               paymentId: response.razorpay_payment_id,
               orderId: response.razorpay_order_id,
@@ -376,19 +489,36 @@ function CheckoutContent() {
         <div className="w-16 h-16 bg-blue-50 text-[#2979FF] rounded-full flex items-center justify-center mx-auto mb-6 shadow-md border border-blue-100">
           <CheckCircle2 className="w-9 h-9" />
         </div>
-        <div className="text-style-badge is-badge mb-3">Order Confirmed · Paid via Razorpay</div>
+        <div className="text-style-badge is-badge mb-3">
+          {paymentDetails.subscriptionId
+            ? "Autopay Mandate Active (60 Months) · Verified via Razorpay"
+            : "Order Confirmed · Paid via Razorpay"}
+        </div>
         <h1 className="text-3xl md:text-4xl font-bold text-[#0A1E3F] tracking-tight mb-4">
           Welcome to Zyoris, {formData.fullName || "Partner"}!
         </h1>
         <p className="text-slate-600 text-base md:text-lg mb-8 leading-relaxed">
-          Your payment of <strong>₹{grandTotal.toLocaleString("en-IN")}</strong> has been successfully received. Workspace provisioning for <strong>{plan.name}</strong> ({userCount} users) has been initiated. A formal GST invoice and onboarding access keys have been sent to <strong>{formData.workEmail || "your email"}</strong>.
+          {paymentDetails.subscriptionId ? (
+            <>
+              Your <strong>60-Month Autopay Mandate</strong> has been successfully authorized via UPI/Card.
+              {isFreeTrialCoupon ? (
+                <> First month is <strong>100% FREE (₹0)</strong>. Next billing cycle will automatically charge on your authorized method with a prior WhatsApp/Email invoice alert.</>
+              ) : (
+                <> Subsequent monthly cycles will auto-debit with automated GST tax invoices generated per cycle.</>
+              )}
+            </>
+          ) : (
+            <>
+              Your payment of <strong>₹{grandTotal.toLocaleString("en-IN")}</strong> has been received. Workspace provisioning for <strong>{plan.name}</strong> ({userCount} users) has been initiated.
+            </>
+          )}
         </p>
 
         <div className="bg-[#F8FAFC] border border-slate-200/90 rounded-2xl p-6 text-left mb-8 shadow-sm">
           <h3 className="font-semibold text-[#0A1E3F] mb-4 text-base border-b border-slate-200 pb-3 flex items-center justify-between">
-            <span>Order Summary & Invoice</span>
+            <span>Subscription & Workspace Details</span>
             <span className="text-xs font-mono text-[#2979FF] bg-blue-50 px-2 py-1 rounded">
-              {paymentDetails.paymentId || `ZY-${Math.floor(100000 + Math.random() * 900000)}`}
+              {paymentDetails.subscriptionId || paymentDetails.paymentId || "ZY-ACTIVE"}
             </span>
           </h3>
           <div className="grid grid-cols-2 gap-3 text-sm">
@@ -399,21 +529,21 @@ function CheckoutContent() {
               </span>
             </div>
             <div>
-              <span className="text-slate-500 block">Razorpay Payment ID</span>
+              <span className="text-slate-500 block">Razorpay Payment / Sub ID</span>
               <span className="font-mono text-xs font-bold text-[#0D47A1]">
-                {paymentDetails.paymentId || "rzp_test_success"}
+                {paymentDetails.subscriptionId || paymentDetails.paymentId || "rzp_live"}
               </span>
             </div>
             <div>
-              <span className="text-slate-500 block">Total Paid (incl. 18% GST)</span>
-              <span className="font-bold text-[#0D47A1]">
-                ₹{grandTotal.toLocaleString("en-IN")}
+              <span className="text-slate-500 block">Autopay Tenure</span>
+              <span className="font-bold text-emerald-700">
+                60 Months (Auto-Debit via UPI / Card)
               </span>
             </div>
             <div>
-              <span className="text-slate-500 block">Billing Cycle</span>
-              <span className="font-medium text-[#0A1E3F] capitalize">
-                {billingCycle} {billingCycle === "annual" && "(8% Savings applied)"}
+              <span className="text-slate-500 block">Plan & Seats</span>
+              <span className="font-medium text-[#0A1E3F]">
+                {plan.name} ({userCount} users)
               </span>
             </div>
             {formData.gstin && (
@@ -435,7 +565,7 @@ function CheckoutContent() {
             Go to Homepage
           </Link>
           <Link
-            href="/contact"
+            href="/contact-v1"
             className="w-full sm:w-auto px-6 py-3 rounded-full bg-white border border-slate-200 text-[#0A1E3F] font-medium hover:bg-slate-50 transition-all"
           >
             Contact Dedicated Support
@@ -452,7 +582,7 @@ function CheckoutContent() {
         <div className="max-w-3xl mx-auto text-center mb-10 md:mb-14">
           <div className="text-style-badge is-badge mb-3">
             <Lock className="w-3.5 h-3.5 inline mr-1 text-[#2979FF]" />
-            256-Bit SSL Encrypted Checkout
+            256-Bit SSL Encrypted Razorpay Checkout
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#0A1E3F] tracking-tight mb-4">
             Activate Your Zyoris Business Workspace
@@ -474,7 +604,7 @@ function CheckoutContent() {
                     <span className="w-6 h-6 rounded-full bg-[#EBF3FF] text-[#2979FF] flex items-center justify-center text-xs">
                       1
                     </span>
-                    Select Plan & Users
+                    Select Plan & Seats
                   </h2>
                   <div className="bg-[#F0F6FF] p-1 rounded-full border border-blue-100 flex items-center text-xs font-medium">
                     <button
@@ -482,7 +612,7 @@ function CheckoutContent() {
                       onClick={() => setBillingCycle("monthly")}
                       className={`px-3 py-1 rounded-full transition-all ${
                         billingCycle === "monthly"
-                          ? "bg-white text-[#0D47A1] shadow-sm font-semibold"
+                          ? "bg-[#2979FF] text-white shadow-sm"
                           : "text-slate-600 hover:text-slate-900"
                       }`}
                     >
@@ -493,73 +623,58 @@ function CheckoutContent() {
                       onClick={() => setBillingCycle("annual")}
                       className={`px-3 py-1 rounded-full transition-all flex items-center gap-1 ${
                         billingCycle === "annual"
-                          ? "bg-[#2979FF] text-white shadow-sm font-semibold"
+                          ? "bg-[#2979FF] text-white shadow-sm"
                           : "text-slate-600 hover:text-slate-900"
                       }`}
                     >
-                      Annual <span className="text-[10px] bg-white/20 px-1 rounded">-8%</span>
+                      <span>Annual</span>
+                      <span className="bg-emerald-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold">
+                        -8%
+                      </span>
                     </button>
                   </div>
                 </div>
 
-                {/* Plan Selection Buttons (Self-serve) */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mb-4">
+                {/* Plan Options Grid */}
+                <div className="grid grid-cols-3 gap-3 mb-5">
                   {Object.values(PLANS).map((p) => {
-                    const isSelected = selectedPlanId === p.id;
+                    const isSelected = p.id === selectedPlanId;
                     return (
                       <button
                         type="button"
                         key={p.id}
-                        onClick={() => {
-                          setSelectedPlanId(p.id);
-                          setUserCount(p.defaultUsers);
-                        }}
-                        className={`p-3.5 rounded-xl border text-left transition-all ${
+                        onClick={() => setSelectedPlanId(p.id)}
+                        className={`p-3 rounded-xl border text-left transition-all ${
                           isSelected
                             ? "border-[#2979FF] bg-[#EBF3FF]/70 shadow-sm ring-2 ring-blue-100"
-                            : "border-slate-200 hover:bg-slate-50"
+                            : "border-slate-200 hover:border-slate-300 bg-white"
                         }`}
                       >
-                        <div className="text-xs font-semibold text-[#0A1E3F]">
-                          {p.name.replace(" Plan", "")}
-                        </div>
-                        <div className="text-base font-bold text-[#0D47A1] mt-0.5">
+                        <div className="font-bold text-sm text-[#0A1E3F]">{p.name.replace(" Plan", "")}</div>
+                        <div className="text-xs text-[#2979FF] font-semibold mt-1">
                           ₹{p.pricePerUser.toLocaleString("en-IN")}
+                          <span className="text-[10px] text-slate-500 font-normal">/seat</span>
                         </div>
-                        <div className="text-[11px] text-slate-500">/user/month</div>
                       </button>
                     );
                   })}
                 </div>
 
-                {/* Looking for Enterprise notice */}
-                <div className="mb-4 p-3 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between text-xs text-slate-600">
-                  <span>
-                    Need <strong>Enterprise / Custom Setup</strong> with dedicated SLAs?
-                  </span>
-                  <Link
-                    href="/contact"
-                    className="text-[#2979FF] font-semibold hover:underline inline-flex items-center gap-1 flex-shrink-0"
-                  >
-                    Contact Team →
-                  </Link>
-                </div>
-
-                {/* Users Count Slider / Input */}
-                <div className="bg-[#F8FAFC] p-4 rounded-xl border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                {/* User Count Stepper */}
+                <div className="bg-[#F8FAFC] border border-slate-200/90 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
-                    <div className="text-sm font-semibold text-[#0A1E3F]">
-                      Team Size / User Seats
-                    </div>
-                    <div className="text-xs text-slate-500">
-                      Minimum 1 user seat required
-                    </div>
+                    <label className="block text-xs font-semibold text-[#0A1E3F]">
+                      Total Team Seats / Users
+                    </label>
+                    <span className="text-[11px] text-slate-500">
+                      Minimum 1 seat · (3 to 5 seats required for ZyorisNew free offer)
+                    </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
                       onClick={() => setUserCount(Math.max(1, userCount - 1))}
-                      className="w-8 h-8 rounded-lg bg-white border border-slate-200 text-slate-700 font-bold hover:bg-slate-100"
+                      className="w-8 h-8 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center justify-center font-bold"
                     >
                       -
                     </button>
@@ -569,32 +684,54 @@ function CheckoutContent() {
                       max={500}
                       value={userCount}
                       onChange={(e) => setUserCount(Math.max(1, parseInt(e.target.value) || 1))}
-                      className="w-16 text-center font-bold text-[#0A1E3F] border border-slate-200 rounded-lg py-1 bg-white"
+                      className="w-14 text-center font-bold text-[#0A1E3F] bg-white border border-slate-200 rounded-lg py-1 text-sm outline-none focus:border-[#2979FF]"
                     />
                     <button
                       type="button"
                       onClick={() => setUserCount(userCount + 1)}
-                      className="w-8 h-8 rounded-lg bg-white border border-slate-200 text-slate-700 font-bold hover:bg-slate-100"
+                      className="w-8 h-8 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 flex items-center justify-center font-bold"
                     >
                       +
                     </button>
                   </div>
                 </div>
+
+                {/* Autopay 60 Months Notice Card */}
+                <div className="mt-4 p-4 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50/60 border border-blue-200/80 flex items-start justify-between gap-3">
+                  <div className="flex items-start gap-2.5">
+                    <RefreshCw className="w-4 h-4 text-[#2979FF] flex-shrink-0 mt-0.5 animate-spin-slow" />
+                    <div>
+                      <div className="text-xs font-bold text-[#0A1E3F] flex items-center gap-1.5">
+                        <span>60-Month Autopay Mandate (Recurring e-Mandate)</span>
+                        <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-1.5 py-0.5 rounded">Active</span>
+                      </div>
+                      <p className="text-[11px] text-[#52667D] mt-0.5 leading-relaxed">
+                        Recurring billing auto-renews via UPI or Credit/Debit Card for up to 60 months. Cancel anytime from your billing dashboard with zero penalty.
+                      </p>
+                    </div>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={enableAutopay}
+                    onChange={(e) => setEnableAutopay(e.target.checked)}
+                    className="mt-1 w-4 h-4 accent-[#2979FF] cursor-pointer"
+                  />
+                </div>
               </div>
 
-              {/* Step 2: Contact & Company Profile */}
+              {/* Step 2: Account Details & OTP Verification */}
               <div>
                 <h2 className="text-lg font-bold text-[#0A1E3F] flex items-center gap-2 mb-4">
                   <span className="w-6 h-6 rounded-full bg-[#EBF3FF] text-[#2979FF] flex items-center justify-center text-xs">
                     2
                   </span>
-                  Company & Admin Details
+                  Account & Contact Information
                 </h2>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-4">
                   <div>
                     <label className="block text-xs font-semibold text-[#0A1E3F] mb-1.5">
-                      Full Name *
+                      Your Full Name *
                     </label>
                     <div className="relative">
                       <User className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
@@ -612,9 +749,9 @@ function CheckoutContent() {
 
                   <div>
                     <label className="block text-xs font-semibold text-[#0A1E3F] mb-1.5">
-                      Official Work Email *
+                      Work Email (For Workspace Admin & Invoices) *
                     </label>
-                    <div className="relative">
+                    <div className="relative mb-2">
                       <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
                       <input
                         required
@@ -638,12 +775,13 @@ function CheckoutContent() {
 
                   <div>
                     <label className="block text-xs font-semibold text-[#0A1E3F] mb-1.5">
-                      Phone Number *
+                      Phone Number (For WhatsApp Alerts & Autopay Mandate) *
                     </label>
-                    <div className="flex rounded-xl overflow-hidden border border-slate-200 focus-within:border-[#2979FF] focus-within:ring-2 focus-within:ring-blue-100 bg-white">
-                      <span className="inline-flex items-center px-3 text-xs font-bold text-slate-700 bg-slate-50 border-r border-slate-200 select-none">
-                        🇮🇳 +91
-                      </span>
+                    <div className="flex border border-slate-200 rounded-xl overflow-hidden focus-within:border-[#2979FF] focus-within:ring-2 focus-within:ring-blue-100 bg-white">
+                      <div className="flex items-center gap-1.5 bg-slate-50 px-3 py-2 border-r border-slate-200 text-xs font-semibold text-slate-700">
+                        <Phone className="w-3.5 h-3.5 text-slate-500" />
+                        <span>+91</span>
+                      </div>
                       <input
                         required
                         type="tel"
@@ -762,9 +900,9 @@ function CheckoutContent() {
                     <div>
                       <div className="flex items-center justify-between mb-1.5">
                         <label className="text-xs font-semibold text-[#0A1E3F]">
-                          GSTIN (Optional for Tax Credit)
+                          GSTIN (Optional for 100% Tax Credit)
                         </label>
-                        <span className="text-[10px] text-slate-400">15-digit alphanumeric</span>
+                        <span className="text-[10px] text-slate-400">15-digit</span>
                       </div>
                       <input
                         type="text"
@@ -804,14 +942,14 @@ function CheckoutContent() {
                   <span className="w-6 h-6 rounded-full bg-[#EBF3FF] text-[#2979FF] flex items-center justify-center text-xs">
                     4
                   </span>
-                  Select Payment Mode
+                  Select Payment / Autopay Mode
                 </h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {[
-                    { id: "upi", label: "Instant UPI / QR Code", icon: QrCode, badge: "GooglePay · PhonePe · Paytm" },
+                    { id: "upi", label: "UPI Autopay / e-Mandate", icon: QrCode, badge: "GooglePay · PhonePe · Paytm" },
                     { id: "card", label: "Credit / Debit Cards", icon: CreditCard, badge: "Visa · Mastercard · RuPay" },
-                    { id: "netbanking", label: "NetBanking / NEFT", icon: Building2, badge: "All Major Indian Banks" },
+                    { id: "netbanking", label: "NetBanking / e-NACH", icon: Building2, badge: "All Major Indian Banks" },
                   ].map((m) => {
                     const isSelected = paymentMethod === m.id;
                     const Icon = m.icon;
@@ -860,13 +998,18 @@ function CheckoutContent() {
                 className="w-full py-4 px-6 rounded-2xl bg-[#1E70FF] hover:bg-[#0D47A1] disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed text-white font-bold text-base md:text-lg transition-all shadow-lg shadow-blue-500/30 flex items-center justify-center gap-2 cursor-pointer"
               >
                 {isSubmitting ? (
-                  <span>{grandTotal === 0 ? "Activating Your Free Workspace..." : "Opening Razorpay Gateway..."}</span>
+                  <span>Opening Secure Razorpay Autopay Gateway...</span>
                 ) : !isEmailVerified ? (
                   <span>Verify Email via OTP to Continue Checkout</span>
-                ) : grandTotal === 0 ? (
+                ) : isFreeTrialCoupon ? (
                   <>
-                    <span>Activate 1 Month Free Workspace (₹0)</span>
+                    <span>Claim 1 Month Free & Authorize 60-Mo Autopay</span>
                     <Sparkles className="w-5 h-5 text-amber-300" />
+                  </>
+                ) : enableAutopay ? (
+                  <>
+                    <span>Confirm & Setup 60-Mo Autopay (₹{grandTotal.toLocaleString("en-IN")})</span>
+                    <ArrowRight className="w-5 h-5" />
                   </>
                 ) : (
                   <>
@@ -878,10 +1021,10 @@ function CheckoutContent() {
 
               <div className="flex items-center justify-center gap-6 text-xs text-slate-500 pt-2">
                 <span className="flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600" /> 100% Secure via Razorpay
+                  <ShieldCheck className="w-4 h-4 text-emerald-600" /> Verified Razorpay Live Production
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-[#2979FF]" /> 7-Day Moneyback Guarantee
+                  <CheckCircle2 className="w-4 h-4 text-[#2979FF]" /> Cancel Autopay Anytime
                 </span>
               </div>
             </form>
@@ -927,7 +1070,7 @@ function CheckoutContent() {
                       type="text"
                       value={couponInput}
                       onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
-                      placeholder="e.g. ZYORIS10"
+                      placeholder="e.g. ZYORISNEW"
                       className="flex-1 px-3 py-1.5 text-xs uppercase font-mono border border-slate-200 rounded-lg outline-none focus:border-[#2979FF] bg-white"
                     />
                     <button
@@ -942,7 +1085,7 @@ function CheckoutContent() {
                     <div className="flex items-center gap-1.5 text-emerald-800">
                       <Percent className="w-3.5 h-3.5 text-emerald-600" />
                       <span>
-                        <strong>{appliedCoupon.code}</strong> applied ({appliedCoupon.discountPercent}% off)
+                        <strong>{appliedCoupon.code}</strong> applied ({appliedCoupon.description})
                       </span>
                     </div>
                     <button
@@ -984,14 +1127,14 @@ function CheckoutContent() {
                 {appliedCoupon && (
                   <div className="flex justify-between text-emerald-600 font-medium text-xs">
                     <span className="flex items-center gap-1">
-                      <Tag className="w-3.5 h-3.5" /> Coupon ({appliedCoupon.code} - {appliedCoupon.discountPercent}% Off)
+                      <Tag className="w-3.5 h-3.5" /> Coupon ({appliedCoupon.code})
                     </span>
                     <span>-₹{couponDiscountAmount.toLocaleString("en-IN")}</span>
                   </div>
                 )}
 
                 <div className="flex justify-between text-slate-600">
-                  <span>Subtotal {billingCycle === "annual" ? "(12 Months)" : "(1 Month)"}</span>
+                  <span>Subtotal Due Today</span>
                   <span className="font-medium text-[#0A1E3F]">
                     ₹{subtotal.toLocaleString("en-IN")}
                   </span>
@@ -1015,11 +1158,46 @@ function CheckoutContent() {
                     ₹{grandTotal.toLocaleString("en-IN")}
                   </span>
                 </div>
-                <span className="text-[11px] text-slate-400 font-medium">All taxes inclusive</span>
+                <div className="text-right">
+                  <span className="text-[11px] text-emerald-700 font-bold block">
+                    {enableAutopay ? "60-Month Autopay Mandate" : "One-Time Payment"}
+                  </span>
+                  <span className="text-[10px] text-slate-400">All taxes inclusive</span>
+                </div>
               </div>
 
+              {/* Autopay Schedule Detail */}
+              {enableAutopay && (
+                <div className="mt-4 p-3.5 rounded-xl bg-slate-100/90 border border-slate-200 text-xs text-slate-700 space-y-1.5">
+                  <div className="font-semibold text-[#0A1E3F] flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-[#2979FF]" />
+                    <span>Autopay Schedule Breakdown:</span>
+                  </div>
+                  {isFreeTrialCoupon ? (
+                    <>
+                      <div className="flex justify-between text-emerald-700 font-medium">
+                        <span>• Month 1 (Day 1 - 30):</span>
+                        <span>₹0 (100% FREE)</span>
+                      </div>
+                      <div className="flex justify-between text-slate-600">
+                        <span>• Months 2 to 60 (Recurring):</span>
+                        <span>₹{recurringGrandTotal.toLocaleString("en-IN")}/month</span>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="flex justify-between text-slate-600">
+                      <span>• Months 1 to 60 (Recurring):</span>
+                      <span>₹{grandTotal.toLocaleString("en-IN")}/month</span>
+                    </div>
+                  )}
+                  <p className="text-[10px] text-slate-500 pt-1 border-t border-slate-200">
+                    Auto-debit starts automatically next cycle via your authorized UPI / Card. Cancel anytime.
+                  </p>
+                </div>
+              )}
+
               {/* Indian Corporate Guarantee */}
-              <div className="mt-6 p-4 rounded-xl bg-blue-50/70 border border-blue-100/90 text-xs text-[#0A1E3F]/80 leading-relaxed">
+              <div className="mt-5 p-4 rounded-xl bg-blue-50/70 border border-blue-100/90 text-xs text-[#0A1E3F]/80 leading-relaxed">
                 <p className="font-semibold text-[#0D47A1] mb-1 flex items-center gap-1.5">
                   <Building2 className="w-4 h-4 text-[#2979FF]" /> Corporate GST Invoicing
                 </p>

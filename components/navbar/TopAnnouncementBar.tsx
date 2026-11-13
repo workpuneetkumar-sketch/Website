@@ -10,21 +10,21 @@ const ANNOUNCEMENTS = [
     badge: "LAUNCH OFFER",
     text: "Get 1 Month 100% FREE for starting 3 to 5 team seats!",
     code: "ZyorisNew",
-    href: "/contact?offer=ZyorisNew",
+    href: "/checkout?plan=starter&coupon=ZyorisNew&users=3",
   },
   {
     icon: Gift,
     badge: "STARTUP DISCOUNT",
     text: "Flat 10% instant off on all plans (Min. 3 users)",
     code: "ZYORIS10",
-    href: "/contact?offer=ZYORIS10",
+    href: "/checkout?plan=growth&coupon=ZYORIS10&users=3",
   },
   {
     icon: Tag,
     badge: "ANNUAL SAVER",
     text: "Flat 8% Instant Discount automatically applied on Annual Billing",
     code: null,
-    href: "/#pricing",
+    href: "/checkout?plan=starter&cycle=annual",
   },
 ];
 

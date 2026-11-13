@@ -30,7 +30,7 @@ const pricingPlans: PricingPlan[] = [
       "Email Support",
     ],
     buttonText: "Get Started →",
-    buttonHref: "/contact",
+    buttonHref: "/checkout?plan=starter",
   },
   {
     id: "growth",
@@ -49,7 +49,7 @@ const pricingPlans: PricingPlan[] = [
       "Priority Support",
     ],
     buttonText: "Get Started →",
-    buttonHref: "/contact",
+    buttonHref: "/checkout?plan=growth",
   },
   {
     id: "business",
@@ -67,7 +67,7 @@ const pricingPlans: PricingPlan[] = [
       "Audit Log & Compliance",
     ],
     buttonText: "Get Started →",
-    buttonHref: "/contact",
+    buttonHref: "/checkout?plan=business",
   },
   {
     id: "enterprise",
@@ -84,7 +84,7 @@ const pricingPlans: PricingPlan[] = [
       "Direct Founder Access",
     ],
     buttonText: "Contact Us →",
-    buttonHref: "/contact",
+    buttonHref: "/contact-v1",
   },
 ];
 
