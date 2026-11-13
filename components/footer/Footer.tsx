@@ -24,7 +24,7 @@ export const Footer: React.FC = () => {
           {/* Social Media & Contact Icons */}
           <div className="flex items-center gap-3">
             <a
-              href="https://www.linkedin.com/in/puneetmunjal7"
+              href="https://in.linkedin.com/company/zyoris"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
@@ -33,7 +33,7 @@ export const Footer: React.FC = () => {
               <Linkedin className="w-4 h-4 md:w-[18px] md:h-[18px]" />
             </a>
             <a
-              href="https://instagram.com/zyoris"
+              href="https://www.instagram.com/zyoris.official/"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
@@ -51,7 +51,7 @@ export const Footer: React.FC = () => {
               <Phone className="w-4 h-4 md:w-[18px] md:h-[18px]" />
             </a>
             <a
-              href="mailto:contact@zyoris.com"
+              href="mailto:info@zyoris.com"
               aria-label="Email"
               className="w-9 h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center bg-[#E8F1FC] border border-[#D4E2F5] text-[#4A74AF] hover:text-[#0D47A1] hover:bg-[#D9E8FA] hover:border-[#2979FF]/40 transition-all duration-200 shadow-sm"
             >

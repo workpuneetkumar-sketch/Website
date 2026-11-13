@@ -164,6 +164,9 @@ Website/
    - Added permanent 301 redirects in `next.config.mjs` for all legacy indexed URLs (`about.html` -> `/about`, `careers.html` -> `/careers`, `contact.html` -> `/contact-v1`, etc.) so existing Google rank carries forward without 404 errors.
    - Embedded Schema.org `@graph` in `app/layout.tsx` (Organization, SoftwareApplication with CRM feature highlights, and Person schema linking Puneet Kumar & Puneet Munjal with LinkedIn profiles).
    - Injected `FAQPage` JSON-LD schema into `app/faq/page.tsx` covering all 50+ FAQs for instant Google rich snippets and direct AI (Gemini, ChatGPT Search, Perplexity) ingestion.
+8. **Exhaustive CRM & SoftwareApplication SEO Keywords + Official Social Mappings**:
+   - Injected exhaustive SEO keywords in `app/layout.tsx` (best crm, simple crm, best crm in india, ai crm, sales crm, zyoris, puneet kumar zyoris, etc.).
+   - Mapped official Instagram (`https://www.instagram.com/zyoris.official/`), LinkedIn company page (`https://in.linkedin.com/company/zyoris`), and `info@zyoris.com` across `app/layout.tsx`, `components/footer/Footer.tsx`, `app/about/page.tsx`, and `app/checkout/page.tsx`.
 
 ---
 

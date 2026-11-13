@@ -159,7 +159,7 @@ export default function AboutPage() {
                 sameAs: [
                   "https://www.linkedin.com/in/puneetkumar07",
                   "https://www.linkedin.com/in/puneetmunjal7",
-                  "https://www.instagram.com/zyoris.technology/",
+                  "https://www.instagram.com/zyoris.official/",
                 ],
                 alumniOf: "Maharshi Dayanand University",
                 knowsAbout: [
@@ -269,7 +269,7 @@ export default function AboutPage() {
                   <span>LinkedIn</span>
                 </a>
                 <a
-                  href="https://www.instagram.com/zyoris.technology/"
+                  href="https://www.instagram.com/zyoris.official/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold bg-[#E8F1FC] border border-[#D4E2F5] text-[#0D47A1] hover:bg-[#2979FF] hover:text-white hover:border-[#2979FF] transition-all duration-200 shadow-sm"
@@ -393,7 +393,7 @@ export default function AboutPage() {
                 </a>
 
                 <a
-                  href="https://www.instagram.com/zyoris.technology/"
+                  href="https://www.instagram.com/zyoris.official/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="deploya-card p-6 flex items-center gap-4 rounded-2xl border border-[#D5E3F7]/80 bg-white hover:-translate-y-1.5 hover:shadow-xl hover:shadow-blue-500/10 hover:border-[#2979FF] transition-all duration-300 group"
@@ -403,7 +403,7 @@ export default function AboutPage() {
                   </div>
                   <div>
                     <div className="font-bold text-[#0A1E3F] text-base group-hover:text-[#2979FF] transition-colors">Instagram</div>
-                    <div className="text-xs text-[#52667D]">@zyoris.technology</div>
+                    <div className="text-xs text-[#52667D]">@zyoris.official</div>
                   </div>
                 </a>
 

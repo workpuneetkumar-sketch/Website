@@ -16,13 +16,35 @@ export const metadata: Metadata = {
   },
   title: "Zyoris | India's AI-Powered Business OS — CRM, HR, Finance in One Platform",
   description: "Zyoris is India's first Intelligent Business Operating System. One platform for Sales & CRM, HR, Finance, and AI Insights. Starting at ₹4,500/user/month. Built for Indian SMBs.",
+  keywords: [
+    "best crm",
+    "best crm in india",
+    "simple crm",
+    "best crm for small business",
+    "best crm for indian smbs",
+    "ai crm",
+    "crm software",
+    "sales crm",
+    "zyoris",
+    "zyoris technology",
+    "what is zyoris",
+    "puneet kumar zyoris",
+    "who is puneet kumar",
+    "business operating system",
+    "all in one business software",
+    "indian hrms payroll",
+    "gst billing accounting crm",
+    "zoho alternative",
+    "salesforce alternative india",
+    "lead management software"
+  ],
   icons: {
     icon: "/logoMain.jpeg",
     apple: "/logoMain.jpeg",
   },
   openGraph: {
-    title: "Zyoris | India's AI-Powered Business OS",
-    description: "One platform for Sales, HR, Finance and Operations. AI that tells you what to do next. Starting at ₹4,500/user/month.",
+    title: "Zyoris | India's AI-Powered Business OS — Best CRM, HRMS & Finance",
+    description: "Zyoris is India's Intelligent Business OS. Best CRM software for Indian SMBs & fast-growing enterprises with AI deal scoring, automated pipeline, HR payroll and GST invoicing.",
     url: "https://zyoris.com/",
     siteName: "Zyoris",
     images: [
@@ -64,6 +86,7 @@ export default function RootLayout({
                   legalName: "Zyoris Technology",
                   url: "https://zyoris.com",
                   logo: "https://zyoris.com/logoMain.jpeg",
+                  email: "info@zyoris.com",
                   description:
                     "India's Intelligent Business Operating System unifying CRM, HR & Payroll, Finance, and AI reasoning agents in a single workspace.",
                   foundingDate: "2026",
@@ -71,7 +94,7 @@ export default function RootLayout({
                     "@type": "Person",
                     "@id": "https://zyoris.com/#founder",
                     name: "Puneet Kumar",
-                    alternateName: ["Puneet Munjal", "Puneet Kumar Zyoris"],
+                    alternateName: ["Puneet Munjal", "Puneet Kumar Zyoris", "Puneet Munjal Zyoris"],
                     jobTitle: "Founder & CEO",
                     url: "https://zyoris.com/about",
                     sameAs: [
@@ -85,17 +108,29 @@ export default function RootLayout({
                     addressRegion: "Haryana",
                     addressCountry: "IN"
                   },
+                  contactPoint: [
+                    {
+                      "@type": "ContactPoint",
+                      telephone: "+91-9650553728",
+                      contactType: "customer service",
+                      email: "info@zyoris.com",
+                      areaServed: "IN",
+                      availableLanguage: ["English", "Hindi"]
+                    }
+                  ],
                   sameAs: [
                     "https://in.linkedin.com/company/zyoris",
-                    "https://www.instagram.com/zyoris.ai"
+                    "https://www.instagram.com/zyoris.official/"
                   ]
                 },
                 {
                   "@type": "SoftwareApplication",
                   "@id": "https://zyoris.com/#software",
                   name: "Zyoris Business OS",
-                  applicationCategory: "BusinessApplication",
-                  operatingSystem: "Cloud, Web-based",
+                  applicationCategory: "BusinessApplication, CRMApplication",
+                  operatingSystem: "Cloud, Web-based, All Browsers, Mobile",
+                  keywords: "best crm, simple crm, best crm in india, best crm for small business, crm software india, sales crm, ai crm, hrms software, gst invoicing software, business operating system, zyoris",
+                  description: "Best CRM and unified Intelligent Business Operating System for Indian SMBs and mid-market enterprises. Features automated sales pipeline, AI lead scoring, WhatsApp integration, HR payroll with compliance, and GST accounting.",
                   offers: {
                     "@type": "Offer",
                     price: "4500",
@@ -108,12 +143,15 @@ export default function RootLayout({
                     }
                   },
                   featureList: [
-                    "Best CRM for Indian SMBs & Mid-Market",
-                    "AI Deal & Lead Scoring",
-                    "Automated Sales Pipeline & Kanban",
-                    "India HRMS & One-Click Payroll with PF/ESI/TDS",
-                    "GST Invoicing & Accounting",
-                    "Embedded Cloud Telephony & WhatsApp CRM"
+                    "Best CRM for Indian SMBs & Mid-Market Enterprises",
+                    "Simple CRM with Clean 3-Click Workflow",
+                    "AI Lead & Deal Scoring with Slippage Prediction",
+                    "Automated Sales Pipeline, Kanban Board & Deal Stages",
+                    "WhatsApp Business API & Cloud Telephony Integration",
+                    "India HRMS & One-Click Automated Payroll (PF, ESI, TDS)",
+                    "GST-Compliant Invoicing, E-Invoicing & Accounting",
+                    "Executive KPI Dashboards, ARR/MRR & Cash Flow Runway",
+                    "Real-Time Multi-Branch & Multi-Tenant Architecture"
                   ]
                 },
                 {

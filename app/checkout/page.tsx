@@ -1023,7 +1023,7 @@ function CheckoutContent() {
                 <p className="font-semibold text-[#0D47A1] mb-1 flex items-center gap-1.5">
                   <Building2 className="w-4 h-4 text-[#2979FF]" /> Corporate GST Invoicing
                 </p>
-                Enter your company GSTIN during checkout to avail input tax credit (ITC) on all subscription fees. Need custom PO or vendor registration? Email <a href="mailto:contact@zyoris.com" className="text-[#2979FF] underline font-medium">contact@zyoris.com</a>.
+                Enter your company GSTIN during checkout to avail input tax credit (ITC) on all subscription fees. Need custom PO or vendor registration? Email <a href="mailto:info@zyoris.com" className="text-[#2979FF] underline font-medium">info@zyoris.com</a>.
               </div>
             </div>
           </div>
