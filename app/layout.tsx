@@ -11,6 +11,9 @@ const michroma = Michroma({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://zyoris.com"),
+  alternates: {
+    canonical: "/",
+  },
   title: "Zyoris | India's AI-Powered Business OS — CRM, HR, Finance in One Platform",
   description: "Zyoris is India's first Intelligent Business Operating System. One platform for Sales & CRM, HR, Finance, and AI Insights. Starting at ₹4,500/user/month. Built for Indian SMBs.",
   icons: {
