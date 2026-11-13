@@ -35,9 +35,9 @@ const FAQ_LIST: FAQItem[] = [
   {
     id: "ov-2",
     category: "overview",
-    question: "Who is the founder of Zyoris?",
+    question: "Who is the founder and CEO of Zyoris?",
     answer:
-      "Zyoris was founded by Puneet Munjal, bringing deep expertise in building enterprise-grade SaaS, AI reasoning agents, distributed architectures, and intuitive workflows tailored for the Indian business ecosystem.",
+      "Zyoris was founded by Puneet Kumar (also known as Puneet Munjal), Founder & CEO. He leads product architecture and strategy, bringing deep expertise in enterprise SaaS, AI reasoning agents, distributed systems, and modern business workflows tailored specifically for the Indian ecosystem.",
   },
   {
     id: "ov-3",
@@ -593,6 +593,25 @@ export default function FAQPage() {
             </div>
           </div>
         </section>
+
+        {/* Google FAQPage JSON-LD Schema for Instant Search Snippets & AI Ingestion */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: FAQ_LIST.map((faq) => ({
+                "@type": "Question",
+                name: faq.question,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: faq.answer,
+                },
+              })),
+            }),
+          }}
+        />
       </main>
       <Footer />
     </div>

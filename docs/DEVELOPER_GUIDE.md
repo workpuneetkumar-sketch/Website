@@ -160,6 +160,10 @@ Website/
 6. **Navbar Responsive Polish & Popup Routing**:
    - Removed awkward vertical divider (`border-right`) on `nav-menu-wrapper` in both `components/navbar/Navbar.tsx` and `app/globals.css` ensuring clean spacing on small tabs / laptops.
    - Redirected Launch Offer modal (`LaunchOfferModal.tsx`) and Top Announcement bar (`TopAnnouncementBar.tsx`) CTAs directly to the contact page (`/contact?offer=ZyorisNew`) instead of the payment checkout page.
+7. **Google Search, Gemini Knowledge Graph & 301 Redirects Engine**:
+   - Added permanent 301 redirects in `next.config.mjs` for all legacy indexed URLs (`about.html` -> `/about`, `careers.html` -> `/careers`, `contact.html` -> `/contact-v1`, etc.) so existing Google rank carries forward without 404 errors.
+   - Embedded Schema.org `@graph` in `app/layout.tsx` (Organization, SoftwareApplication with CRM feature highlights, and Person schema linking Puneet Kumar & Puneet Munjal with LinkedIn profiles).
+   - Injected `FAQPage` JSON-LD schema into `app/faq/page.tsx` covering all 50+ FAQs for instant Google rich snippets and direct AI (Gemini, ChatGPT Search, Perplexity) ingestion.
 
 ---
 
