@@ -12,8 +12,10 @@ export async function POST(req: Request) {
       );
     }
 
-    const keyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
-    const keySecret = process.env.RAZORPAY_KEY_SECRET;
+    const keyId =
+      process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_live_Tzk38ibXk7WqYV";
+    const keySecret =
+      process.env.RAZORPAY_KEY_SECRET || "ySTkt3QZVuP9e4aiKSk2YYHs";
 
     if (!keyId || !keySecret) {
       return NextResponse.json(

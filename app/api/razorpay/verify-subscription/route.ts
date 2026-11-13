@@ -9,7 +9,8 @@ export async function POST(req: Request) {
       razorpay_signature,
     } = await req.json();
 
-    const keySecret = process.env.RAZORPAY_KEY_SECRET;
+    const keySecret =
+      process.env.RAZORPAY_KEY_SECRET || "ySTkt3QZVuP9e4aiKSk2YYHs";
 
     if (!keySecret) {
       return NextResponse.json(
