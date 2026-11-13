@@ -1,11 +1,18 @@
 import React, { useRef, useState } from "react";
 import { Button } from "../buttons/Button";
-import { PhoneOtpVerifier } from "../auth/PhoneOtpVerifier";
+import { EmailOtpVerifier } from "../auth/EmailOtpVerifier";
+import { CheckCircle2, Loader2 } from "lucide-react";
 
 export const BannerCTASection: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(true);
+  const [name, setName] = useState("");
+  const [company, setCompany] = useState("");
+  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+  const [teamSize, setTeamSize] = useState("1-10");
+  const [lookingFor, setLookingFor] = useState("");
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -17,6 +24,39 @@ export const BannerCTASection: React.FC = () => {
     } else {
       videoRef.current.play();
       setIsPlaying(true);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isEmailVerified) return;
+
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/leads/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          company,
+          email,
+          phone,
+          teamSize,
+          lookingFor,
+          source: "Homepage Banner CTA Form",
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to submit");
+      }
+
+      setSubmitted(true);
+    } catch (err) {
+      console.error(err);
+      alert("Submission error. Please try again or WhatsApp us.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -102,101 +142,150 @@ export const BannerCTASection: React.FC = () => {
               data-animate="fade-up-3"
               className="w-full max-w-xl mx-auto my-6 p-6 rounded-2xl bg-[rgba(7,16,31,0.58)] border border-white/30 backdrop-blur-xl shadow-[0_18px_50px_rgba(0,0,0,0.28)]"
             >
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  alert("Details received: our team will reach out within 24 hours.");
-                }}
-                className="space-y-4 text-left"
-              >
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {submitted ? (
+                <div className="py-8 text-center space-y-3 animate-in fade-in duration-300">
+                  <div className="w-12 h-12 mx-auto rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400">
+                    <CheckCircle2 className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">Thank You!</h3>
+                  <p className="text-sm text-white/80 max-w-md mx-auto">
+                    We have received your details. A confirmation email has been sent to <strong>{email}</strong>, and our team will connect with you shortly.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSubmitted(false);
+                      setIsEmailVerified(false);
+                      setName("");
+                      setCompany("");
+                      setEmail("");
+                      setPhone("");
+                      setLookingFor("");
+                    }}
+                    className="mt-4 px-4 py-2 rounded-lg bg-white/20 hover:bg-white/30 text-white text-xs font-semibold transition-colors"
+                  >
+                    Submit another response
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-4 text-left">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs uppercase tracking-wider text-white mb-1 font-semibold">Your Name *</label>
+                      <input
+                        type="text"
+                        required
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Your name"
+                        className="w-full px-3 py-2 rounded-lg bg-white/15 border border-white/25 text-white placeholder-white/55 focus:outline-none focus:border-blue-400 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs uppercase tracking-wider text-white mb-1 font-semibold">Company Name *</label>
+                      <input
+                        type="text"
+                        required
+                        value={company}
+                        onChange={(e) => setCompany(e.target.value)}
+                        placeholder="e.g. Zyoris"
+                        className="w-full px-3 py-2 rounded-lg bg-white/15 border border-white/25 text-white placeholder-white/55 focus:outline-none focus:border-blue-400 text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs uppercase tracking-wider text-white mb-1 font-semibold">Work Email *</label>
+                      <input
+                        type="email"
+                        required
+                        value={email}
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                          setIsEmailVerified(false);
+                        }}
+                        placeholder="info@zyoris.com"
+                        className="w-full px-3 py-2 rounded-lg bg-white/15 border border-white/25 text-white placeholder-white/55 focus:outline-none focus:border-blue-400 text-sm"
+                      />
+                      <EmailOtpVerifier
+                        email={email}
+                        name={name}
+                        isVerified={isEmailVerified}
+                        onVerified={(v) => setIsEmailVerified(v)}
+                        theme="dark"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs uppercase tracking-wider text-white mb-1 font-semibold">Phone Number *</label>
+                      <div className="flex rounded-lg overflow-hidden border border-white/25 focus-within:border-blue-400 bg-white/15">
+                        <span className="inline-flex items-center px-3 text-xs font-bold text-white/90 bg-white/10 border-r border-white/20 select-none">
+                          🇮🇳 +91
+                        </span>
+                        <input
+                          type="tel"
+                          required
+                          value={phone.replace(/^\+91\s*/, "")}
+                          onChange={(e) => {
+                            const raw = e.target.value.replace(/\D/g, "").slice(0, 10);
+                            setPhone(`+91${raw}`);
+                          }}
+                          placeholder="96505 53728"
+                          className="w-full px-3 py-2 bg-transparent text-white placeholder-white/55 focus:outline-none text-sm"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
                   <div>
-                    <label className="block text-xs uppercase tracking-wider text-white mb-1 font-semibold">Your Name *</label>
+                    <label className="block text-xs uppercase tracking-wider text-white mb-1 font-semibold">Team Size</label>
+                    <select
+                      value={teamSize}
+                      onChange={(e) => setTeamSize(e.target.value)}
+                      className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-white/25 text-white focus:outline-none focus:border-blue-400 text-sm"
+                    >
+                      <option value="1-10">1–10 people</option>
+                      <option value="11-50">11–50 people</option>
+                      <option value="51-200">51–200 people</option>
+                      <option value="200+">200+ people</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-white mb-1 font-semibold">What are you looking for?</label>
                     <input
                       type="text"
-                      required
-                      placeholder="Your name"
+                      value={lookingFor}
+                      onChange={(e) => setLookingFor(e.target.value)}
+                      placeholder="e.g. CRM + HR integration, AI recommendations..."
                       className="w-full px-3 py-2 rounded-lg bg-white/15 border border-white/25 text-white placeholder-white/55 focus:outline-none focus:border-blue-400 text-sm"
                     />
                   </div>
-                  <div>
-                    <label className="block text-xs uppercase tracking-wider text-white mb-1 font-semibold">Company Name *</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Zyoris"
-                      className="w-full px-3 py-2 rounded-lg bg-white/15 border border-white/25 text-white placeholder-white/55 focus:outline-none focus:border-blue-400 text-sm"
-                    />
+
+                  <button
+                    type="submit"
+                    disabled={!isEmailVerified || submitting}
+                    className="w-full py-3.5 px-6 rounded-xl bg-[#1E70FF] hover:bg-[#0D47A1] disabled:bg-white/20 disabled:text-white/40 disabled:cursor-not-allowed text-white font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30 cursor-pointer"
+                  >
+                    {submitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Sending Request...</span>
+                      </>
+                    ) : (
+                      <span>
+                        {isEmailVerified
+                          ? "Send my details →"
+                          : "Verify Email via OTP to Continue"}
+                      </span>
+                    )}
+                  </button>
+
+                  <div className="text-center text-xs text-white/80 pt-2">
+                    🔒 Your information is private and will never be shared with third parties.
                   </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs uppercase tracking-wider text-white mb-1 font-semibold">Work Email *</label>
-                    <input
-                      type="email"
-                      required
-                      placeholder="info@zyoris.com"
-                      className="w-full px-3 py-2 rounded-lg bg-white/15 border border-white/25 text-white placeholder-white/55 focus:outline-none focus:border-blue-400 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs uppercase tracking-wider text-white mb-1 font-semibold">Phone Number *</label>
-                    <input
-                      type="tel"
-                      required
-                      value={phone}
-                      onChange={(e) => {
-                        setPhone(e.target.value);
-                        setIsPhoneVerified(false);
-                      }}
-                      placeholder="+91 96505 53728"
-                      className="w-full px-3 py-2 rounded-lg bg-white/15 border border-white/25 text-white placeholder-white/55 focus:outline-none focus:border-blue-400 text-sm"
-                    />
-                    <PhoneOtpVerifier
-                      phoneNumber={phone}
-                      isVerified={isPhoneVerified}
-                      onVerified={(verified) => setIsPhoneVerified(verified)}
-                      theme="dark"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs uppercase tracking-wider text-white mb-1 font-semibold">Team Size</label>
-                  <select className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-white/25 text-white focus:outline-none focus:border-blue-400 text-sm">
-                    <option value="1-10">1–10 people</option>
-                    <option value="11-50">11–50 people</option>
-                    <option value="51-200">51–200 people</option>
-                    <option value="200+">200+ people</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-xs uppercase tracking-wider text-white mb-1 font-semibold">What are you looking for?</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. CRM + HR integration, AI recommendations..."
-                    className="w-full px-3 py-2 rounded-lg bg-white/15 border border-white/25 text-white placeholder-white/55 focus:outline-none focus:border-blue-400 text-sm"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={!isPhoneVerified}
-                  className="w-full py-3.5 px-6 rounded-xl bg-[#2979FF] hover:bg-[#1E70FF] disabled:bg-white/20 disabled:text-white/40 disabled:cursor-not-allowed text-white font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-lg cursor-pointer"
-                >
-                  <span>
-                    {isPhoneVerified
-                      ? "Send my details →"
-                      : "Verify Phone via OTP to Continue"}
-                  </span>
-                </button>
-
-                <div className="text-center text-xs text-white/80 pt-2">
-                  🔒 Your information is private and will never be shared with third parties.
-                </div>
-              </form>
+                </form>
+              )}
             </div>
           </div>
         </div>

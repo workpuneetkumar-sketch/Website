@@ -23,7 +23,7 @@ import {
   Tag,
   Percent,
 } from "lucide-react";
-import { PhoneOtpVerifier } from "@/components/auth/PhoneOtpVerifier";
+import { EmailOtpVerifier } from "@/components/auth/EmailOtpVerifier";
 
 interface PlanConfig {
   id: string;
@@ -129,7 +129,7 @@ function CheckoutContent() {
   });
 
   const [paymentMethod, setPaymentMethod] = useState<"upi" | "card" | "netbanking" | "invoice">("upi");
-  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
 
@@ -621,37 +621,42 @@ function CheckoutContent() {
                         type="email"
                         name="workEmail"
                         value={formData.workEmail}
-                        onChange={handleChange}
+                        onChange={(e) => {
+                          handleChange(e);
+                          setIsEmailVerified(false);
+                        }}
                         placeholder="puneet@company.com"
                         className="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-xl focus:border-[#2979FF] focus:ring-2 focus:ring-blue-100 outline-none"
                       />
                     </div>
+                    <EmailOtpVerifier
+                      email={formData.workEmail}
+                      isVerified={isEmailVerified}
+                      onVerified={(v) => setIsEmailVerified(v)}
+                    />
                   </div>
 
                   <div>
                     <label className="block text-xs font-semibold text-[#0A1E3F] mb-1.5">
                       Phone Number *
                     </label>
-                    <div className="relative">
-                      <Phone className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                    <div className="flex rounded-xl overflow-hidden border border-slate-200 focus-within:border-[#2979FF] focus-within:ring-2 focus-within:ring-blue-100 bg-white">
+                      <span className="inline-flex items-center px-3 text-xs font-bold text-slate-700 bg-slate-50 border-r border-slate-200 select-none">
+                        🇮🇳 +91
+                      </span>
                       <input
                         required
                         type="tel"
                         name="phone"
-                        value={formData.phone}
+                        value={formData.phone.replace(/^\+91\s*/, "")}
                         onChange={(e) => {
-                          handleChange(e);
-                          setIsPhoneVerified(false);
+                          const raw = e.target.value.replace(/\D/g, "").slice(0, 10);
+                          setFormData((prev: any) => ({ ...prev, phone: `+91${raw}` }));
                         }}
-                        placeholder="+91 98765 43210"
-                        className="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-xl focus:border-[#2979FF] focus:ring-2 focus:ring-blue-100 outline-none"
+                        placeholder="98765 43210"
+                        className="w-full px-3 py-2 text-sm bg-transparent outline-none text-slate-800 placeholder-slate-400"
                       />
                     </div>
-                    <PhoneOtpVerifier
-                      phoneNumber={formData.phone}
-                      isVerified={isPhoneVerified}
-                      onVerified={(verified) => setIsPhoneVerified(verified)}
-                    />
                   </div>
 
                   <div>
@@ -851,13 +856,13 @@ function CheckoutContent() {
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={isSubmitting || !isPhoneVerified}
-                className="w-full py-4 px-6 rounded-2xl bg-[#2979FF] hover:bg-[#0D47A1] disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed text-white font-bold text-base md:text-lg transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2 cursor-pointer"
+                disabled={isSubmitting || !isEmailVerified}
+                className="w-full py-4 px-6 rounded-2xl bg-[#1E70FF] hover:bg-[#0D47A1] disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed text-white font-bold text-base md:text-lg transition-all shadow-lg shadow-blue-500/30 flex items-center justify-center gap-2 cursor-pointer"
               >
                 {isSubmitting ? (
                   <span>{grandTotal === 0 ? "Activating Your Free Workspace..." : "Opening Razorpay Gateway..."}</span>
-                ) : !isPhoneVerified ? (
-                  <span>Verify Phone via OTP to Continue Checkout</span>
+                ) : !isEmailVerified ? (
+                  <span>Verify Email via OTP to Continue Checkout</span>
                 ) : grandTotal === 0 ? (
                   <>
                     <span>Activate 1 Month Free Workspace (₹0)</span>

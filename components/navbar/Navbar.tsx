@@ -78,6 +78,14 @@ export const Navbar: React.FC = () => {
                   <Button
                     href="/#early-access"
                     variant="primary"
+                    onClick={() => {
+                      if (typeof window !== "undefined") {
+                        const el = document.getElementById("early-access");
+                        if (el) {
+                          el.scrollIntoView({ behavior: "smooth", block: "center" });
+                        }
+                      }
+                    }}
                   >
                     Get Early Access
                   </Button>
@@ -155,7 +163,7 @@ export const Navbar: React.FC = () => {
             </Link>
             <div className="pt-2" onClick={() => setMobileMenuOpen(false)}>
               <Button
-                href="/#contact"
+                href="/#early-access"
                 variant="primary"
               >
                 Get Early Access

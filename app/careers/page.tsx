@@ -15,8 +15,9 @@ import {
   HeartHandshake,
   Lightbulb,
   Zap,
+  Loader2,
 } from "lucide-react";
-import { PhoneOtpVerifier } from "@/components/auth/PhoneOtpVerifier";
+import { EmailOtpVerifier } from "@/components/auth/EmailOtpVerifier";
 
 export default function CareersPage() {
   const [formData, setFormData] = useState({
@@ -29,32 +30,37 @@ export default function CareersPage() {
     whyJoin: "",
   });
 
-  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isEmailVerified) return;
 
-    // Construct direct mailto to hr@zyoris.com with formatted body
-    const subject = encodeURIComponent(
-      `Internship / Role Application: ${formData.name} (${formData.role})`
-    );
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/leads/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          company: `College/Org: ${formData.college || "N/A"}`,
+          email: formData.email,
+          phone: formData.phone,
+          lookingFor: `Role: ${formData.role}. Portfolio: ${formData.portfolio}. Statement: ${formData.whyJoin}`,
+          source: "Careers / Hiring Application",
+        }),
+      });
 
-    const body = encodeURIComponent(
-      `Candidate Application Details:\n\n` +
-        `• Name: ${formData.name}\n` +
-        `• Email: ${formData.email}\n` +
-        `• Phone: ${formData.phone}\n` +
-        `• College / Education: ${formData.college || "N/A"}\n` +
-        `• Interested Role: ${formData.role}\n` +
-        `• Portfolio / GitHub / LinkedIn: ${formData.portfolio || "N/A"}\n\n` +
-        `• Why they want to join & What they bring:\n${formData.whyJoin}\n\n` +
-        `Sent via Zyoris Careers Portal.`
-    );
-
-    // Open user's email client addressed directly to hr@zyoris.com
-    window.location.href = `mailto:hr@zyoris.com?subject=${subject}&body=${body}`;
-    setSubmitted(true);
+      if (!res.ok) throw new Error("Failed to submit");
+      setSubmitted(true);
+    } catch (err) {
+      console.error(err);
+      alert("Submission error. Please try again or WhatsApp us.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -242,31 +248,39 @@ export default function CareersPage() {
                             type="email"
                             required
                             value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                            onChange={(e) => {
+                              setFormData({ ...formData, email: e.target.value });
+                              setIsEmailVerified(false);
+                            }}
                             placeholder="you@email.com"
                             className="w-full px-4 py-3 rounded-xl border border-[#C2D4EE] text-[#0A1E3F] text-sm focus:outline-none focus:border-[#2979FF] bg-slate-50/50"
+                          />
+                          <EmailOtpVerifier
+                            email={formData.email}
+                            isVerified={isEmailVerified}
+                            onVerified={(v) => setIsEmailVerified(v)}
                           />
                         </div>
                         <div>
                           <label className="block text-xs font-bold uppercase text-[#0A1E3F]/80 mb-1.5">
                             Phone / WhatsApp *
                           </label>
-                          <input
-                            type="tel"
-                            required
-                            value={formData.phone}
-                            onChange={(e) => {
-                              setFormData({ ...formData, phone: e.target.value });
-                              setIsPhoneVerified(false);
-                            }}
-                            placeholder="+91 98765 43210"
-                            className="w-full px-4 py-3 rounded-xl border border-[#C2D4EE] text-[#0A1E3F] text-sm focus:outline-none focus:border-[#2979FF] bg-slate-50/50"
-                          />
-                          <PhoneOtpVerifier
-                            phoneNumber={formData.phone}
-                            isVerified={isPhoneVerified}
-                            onVerified={(verified) => setIsPhoneVerified(verified)}
-                          />
+                          <div className="flex rounded-xl overflow-hidden border border-[#C2D4EE] focus-within:border-[#2979FF] bg-slate-50/50">
+                            <span className="inline-flex items-center px-3.5 text-xs font-bold text-[#0A1E3F] bg-blue-50/80 border-r border-[#C2D4EE] select-none">
+                              🇮🇳 +91
+                            </span>
+                            <input
+                              type="tel"
+                              required
+                              value={formData.phone.replace(/^\+91\s*/, "")}
+                              onChange={(e) => {
+                                const raw = e.target.value.replace(/\D/g, "").slice(0, 10);
+                                setFormData({ ...formData, phone: `+91${raw}` });
+                              }}
+                              placeholder="98765 43210"
+                              className="w-full px-4 py-3 bg-transparent text-[#0A1E3F] text-sm focus:outline-none"
+                            />
+                          </div>
                         </div>
                       </div>
 
@@ -331,15 +345,24 @@ export default function CareersPage() {
                       <div className="pt-2">
                         <button
                           type="submit"
-                          disabled={!isPhoneVerified}
-                          className="w-full py-3.5 px-6 rounded-xl bg-[#0D47A1] hover:bg-[#0A1E3F] disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed text-white font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg cursor-pointer"
+                          disabled={!isEmailVerified || submitting}
+                          className="w-full py-3.5 px-6 rounded-xl bg-[#1E70FF] hover:bg-[#0D47A1] disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed text-white font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 hover:shadow-lg cursor-pointer"
                         >
-                          <Send className="w-4 h-4" />
-                          <span>
-                            {isPhoneVerified
-                              ? "Submit Application to hr@zyoris.com"
-                              : "Verify Phone via OTP to Submit"}
-                          </span>
+                          {submitting ? (
+                            <>
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                              <span>Submitting Application...</span>
+                            </>
+                          ) : (
+                            <>
+                              <Send className="w-4 h-4" />
+                              <span>
+                                {isEmailVerified
+                                  ? "Submit Application →"
+                                  : "Verify Email via OTP to Submit"}
+                              </span>
+                            </>
+                          )}
                         </button>
                       </div>
                     </form>

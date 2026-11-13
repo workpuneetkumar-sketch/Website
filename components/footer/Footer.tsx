@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Linkedin, Instagram, Mail } from "lucide-react";
+import { Linkedin, Instagram, Mail, Phone } from "lucide-react";
 
 export const Footer: React.FC = () => {
   return (
@@ -40,6 +40,15 @@ export const Footer: React.FC = () => {
               className="w-9 h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center bg-[#E8F1FC] border border-[#D4E2F5] text-[#4A74AF] hover:text-[#0D47A1] hover:bg-[#D9E8FA] hover:border-[#2979FF]/40 transition-all duration-200 shadow-sm"
             >
               <Instagram className="w-4 h-4 md:w-[18px] md:h-[18px]" />
+            </a>
+            <a
+              href="https://wa.me/919650553728?text=Hi%20Zyoris%20Team%2C%20I%20would%20like%20to%20know%20more%20about%20Zyoris%20Business%20OS."
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp"
+              className="w-9 h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center bg-[#E8F1FC] border border-[#D4E2F5] text-[#25D366] hover:text-white hover:bg-[#25D366] hover:border-[#25D366] transition-all duration-200 shadow-sm"
+            >
+              <Phone className="w-4 h-4 md:w-[18px] md:h-[18px]" />
             </a>
             <a
               href="mailto:contact@zyoris.com"

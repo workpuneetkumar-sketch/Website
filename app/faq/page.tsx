@@ -494,9 +494,14 @@ export default function FAQPage() {
                         </a>
                       </div>
                       <div className="flex items-center gap-2.5 text-size-small text-[#0A1E3F] mt-2 font-medium">
-                        <Phone className="w-4 h-4 text-[#2979FF] flex-shrink-0" />
-                        <a href="tel:+919650553728" className="hover:text-[#2979FF] transition-colors">
-                          +91 96505 53728
+                        <Phone className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                        <a
+                          href="https://wa.me/919650553728?text=Hi%20Zyoris%20Team%2C%20I%20have%20a%20question%20regarding%20Zyoris%20OS."
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:text-emerald-600 transition-colors flex items-center gap-1.5"
+                        >
+                          <span>+91 96505 53728 (WhatsApp)</span>
                         </a>
                       </div>
                       <div className="spacer-small"></div>

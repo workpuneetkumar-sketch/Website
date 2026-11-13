@@ -122,7 +122,18 @@ export const HeroSection: React.FC = () => {
 
             {/* Button Group */}
             <div animate="load-hero-3" data-animate="load-hero-3" className="button-group align-center mt-2">
-              <Button href="/#early-access" variant="primary">
+              <Button
+                href="/#early-access"
+                variant="primary"
+                onClick={() => {
+                  if (typeof window !== "undefined") {
+                    const el = document.getElementById("early-access");
+                    if (el) {
+                      el.scrollIntoView({ behavior: "smooth", block: "center" });
+                    }
+                  }
+                }}
+              >
                 Request Early Access →
               </Button>
               <Button href="/#features" variant="secondary">

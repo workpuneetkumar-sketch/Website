@@ -123,9 +123,12 @@ body {
 
 /* Zyoris Blue & White Theme Overrides */
 .button {
-  background-color: #5d97e9 !important;
+  background-color: #1E70FF !important;
   color: #ffffff !important;
   border-radius: 40px !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease-in-out !important;
+  box-shadow: 0 4px 14px rgba(30, 112, 255, 0.25) !important;
 }
 .zyoris-logo {
   font-family: var(--font-zyoris),sans-serif ;
@@ -136,7 +139,9 @@ body {
   line-height: 1;
 }
 .button:hover {
-  background-color: var(--color-zyoris--bright) !important;
+  background-color: #0D47A1 !important;
+  box-shadow: 0 6px 20px rgba(13, 71, 161, 0.35) !important;
+  transform: translateY(-1px);
 }
 
 .button.is-secondary {

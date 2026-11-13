@@ -34,9 +34,7 @@ export const PhoneOtpVerifier: React.FC<PhoneOtpVerifierProps> = ({
 
   const confirmationResultRef = useRef<ConfirmationResult | null>(null);
   const recaptchaVerifierRef = useRef<RecaptchaVerifier | null>(null);
-  const recaptchaContainerId = useRef(
-    `recaptcha-container-${Math.random().toString(36).substring(2, 9)}`
-  );
+  const recaptchaAnchorRef = useRef<HTMLDivElement>(null);
 
   // Clean 10-digit phone number to international E.164 (+91XXXXXXXXXX)
   const formatPhoneNumber = (phone: string): string => {
@@ -45,6 +43,33 @@ export const PhoneOtpVerifier: React.FC<PhoneOtpVerifierProps> = ({
     if (cleaned.length > 10 && !phone.startsWith("+")) return `+${cleaned}`;
     return phone;
   };
+
+  // Auto-reset whenever phone number changes or drops below 10 digits
+  const lastPhoneRef = useRef(phoneNumber);
+  useEffect(() => {
+    const digits = phoneNumber.replace(/\D/g, "").slice(-10);
+    const lastDigits = lastPhoneRef.current.replace(/\D/g, "").slice(-10);
+
+    if (digits !== lastDigits || digits.length < 10) {
+      setStep("idle");
+      setOtp("");
+      setError(null);
+      confirmationResultRef.current = null;
+      if (isVerified) {
+        onVerified(false);
+      }
+    }
+    lastPhoneRef.current = phoneNumber;
+  }, [phoneNumber, isVerified, onVerified]);
+
+  // Sync if isVerified prop changes externally
+  useEffect(() => {
+    if (isVerified) {
+      setStep("verified");
+    } else if (step === "verified") {
+      setStep("idle");
+    }
+  }, [isVerified]);
 
   // Timer countdown for resend
   useEffect(() => {
@@ -71,10 +96,25 @@ export const PhoneOtpVerifier: React.FC<PhoneOtpVerifierProps> = ({
   const initRecaptcha = () => {
     if (typeof window === "undefined") return null;
 
-    if (!recaptchaVerifierRef.current) {
+    const anchor = recaptchaAnchorRef.current;
+    if (!anchor) return null;
+
+    // Clear old verifier to avoid auth/invalid-app-credential token mismatch
+    if (recaptchaVerifierRef.current) {
+      try {
+        recaptchaVerifierRef.current.clear();
+      } catch (e) {
+        // ignore
+      }
+      recaptchaVerifierRef.current = null;
+    }
+
+    anchor.innerHTML = "";
+
+    try {
       recaptchaVerifierRef.current = new RecaptchaVerifier(
         auth,
-        recaptchaContainerId.current,
+        anchor,
         {
           size: "invisible",
           callback: () => {
@@ -85,15 +125,19 @@ export const PhoneOtpVerifier: React.FC<PhoneOtpVerifierProps> = ({
           },
         }
       );
+      return recaptchaVerifierRef.current;
+    } catch (e: any) {
+      console.error("RecaptchaVerifier init error:", e);
+      return null;
     }
-    return recaptchaVerifierRef.current;
   };
 
   const handleSendOtp = async () => {
     setError(null);
     const formatted = formatPhoneNumber(phoneNumber);
 
-    if (!phoneNumber || phoneNumber.replace(/\D/g, "").length < 10) {
+    const digitsOnly = phoneNumber.replace(/\D/g, "");
+    if (!phoneNumber || digitsOnly.length < 10) {
       setError("Please enter a valid 10-digit Indian mobile number first.");
       return;
     }
@@ -102,7 +146,9 @@ export const PhoneOtpVerifier: React.FC<PhoneOtpVerifierProps> = ({
 
     try {
       const appVerifier = initRecaptcha();
-      if (!appVerifier) throw new Error("reCAPTCHA initialization failed");
+      if (!appVerifier) {
+        throw new Error("Security verification container not ready. Please try again.");
+      }
 
       const confirmation = await signInWithPhoneNumber(
         auth,
@@ -115,20 +161,41 @@ export const PhoneOtpVerifier: React.FC<PhoneOtpVerifierProps> = ({
       setTimer(45); // 45s cooldown
     } catch (err: any) {
       console.error("Firebase SMS error:", err);
-      // Reset reCAPTCHA if failed
+      // Reset reCAPTCHA if failed so user can immediately retry
       if (recaptchaVerifierRef.current) {
         try {
           recaptchaVerifierRef.current.clear();
-          recaptchaVerifierRef.current = null;
         } catch (e) {
           // ignore
         }
+        recaptchaVerifierRef.current = null;
       }
 
       if (err?.code === "auth/invalid-phone-number") {
         setError("Invalid mobile number format. Please check and try again.");
       } else if (err?.code === "auth/too-many-requests") {
         setError("SMS quota reached for today or too many attempts. Please try later.");
+      } else if (
+        err?.code === "auth/operation-not-allowed" ||
+        err?.message?.includes("SMS unable to be sent until this region enabled")
+      ) {
+        setError(
+          "SMS Region Restriction: India (+91) needs to be enabled in Firebase Console > Authentication > Settings > SMS Region Policy."
+        );
+      } else if (
+        err?.code === "auth/invalid-app-credential" ||
+        err?.message?.includes("invalid-app-credential")
+      ) {
+        setError(
+          "Firebase Security Check: Please try opening http://127.0.0.1:3000 instead of localhost, OR use a test phone number added in Firebase Console."
+        );
+      } else if (
+        err?.code === "auth/billing-not-enabled" ||
+        err?.message?.includes("billing-not-enabled")
+      ) {
+        setError(
+          `Firebase Error: ${err?.code || "auth/billing-not-enabled"} - ${err?.message || "Billing is still synchronizing or Cloud Identity Toolkit API is pending. Please wait 1-2 mins and retry."}`
+        );
       } else {
         setError(err?.message || "Failed to send SMS OTP. Please check your number.");
       }
@@ -180,8 +247,8 @@ export const PhoneOtpVerifier: React.FC<PhoneOtpVerifierProps> = ({
 
   return (
     <div className={`space-y-2 mt-1.5 ${className}`}>
-      {/* Invisible reCAPTCHA Anchor */}
-      <div id={recaptchaContainerId.current} />
+      {/* Standalone 100% empty anchor for Firebase reCAPTCHA */}
+      <div ref={recaptchaAnchorRef} />
 
       {step === "idle" && (
         <div className="flex items-center gap-2">
@@ -251,6 +318,18 @@ export const PhoneOtpVerifier: React.FC<PhoneOtpVerifierProps> = ({
             >
               {loading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <ShieldCheck className="w-3.5 h-3.5" />}
               <span>Verify</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setStep("idle");
+                setOtp("");
+                setError(null);
+                confirmationResultRef.current = null;
+              }}
+              className="px-2.5 py-1.5 text-[11px] text-slate-500 hover:text-slate-800 underline transition-colors"
+            >
+              Change number
             </button>
           </div>
         </div>

@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "../styles/deploya.css"
-import {Michroma} from "next/font/google"
+import { Michroma } from "next/font/google";
 
 const michroma = Michroma({
-  weight : "400",
+  weight: "400",
   subsets: ["latin"],
   variable: "--font-zyoris",
-})
-
-
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://zyoris.com"),
